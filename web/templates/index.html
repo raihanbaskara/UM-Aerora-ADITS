@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AERORA ADITS — Acoustic Data Acquisition Hub</title>
+
+    <!-- Typography: Playfair Display (Editorial Serif) + Plus Jakarta Sans + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Palette: Ethereal Warm Glass & Editorial Luxury */
+            --bg-base: #FAF9F6;
+            --bg-mesh: radial-gradient(at 0% 0%, rgba(224, 231, 255, 0.45) 0px, transparent 55%),
+                       radial-gradient(at 100% 0%, rgba(254, 243, 199, 0.35) 0px, transparent 50%),
+                       radial-gradient(at 50% 100%, rgba(241, 245, 249, 0.6) 0px, transparent 60%);
+
+            --glass-shell: rgba(255, 255, 255, 0.72);
+            --glass-core: rgba(255, 255, 255, 0.94);
+            --border-shell: rgba(255, 255, 255, 0.85);
+            --border-core: rgba(226, 232, 240, 0.85);
+            --border-subtle: rgba(203, 213, 225, 0.5);
+
+            --text-heading: #0F172A;
+            --text-body: #334155;
+            --text-muted: #64748B;
+            --text-light: #94A3B8;
+
+            --accent-indigo: #1E40AF;
+            --accent-indigo-subtle: rgba(30, 64, 175, 0.07);
+            --accent-emerald: #047857;
+            --accent-emerald-subtle: rgba(4, 120, 87, 0.08);
+            --accent-crimson: #BE123C;
+            --accent-crimson-subtle: rgba(190, 18, 60, 0.08);
+            --accent-amber: #B45309;
+            --accent-amber-subtle: rgba(180, 83, 9, 0.08);
+
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --shadow-ambient: 0 20px 40px -15px rgba(15, 23, 42, 0.04), 0 4px 16px -2px rgba(15, 23, 42, 0.02);
+            --shadow-subtle: 0 4px 12px rgba(15, 23, 42, 0.03);
+            --inner-bevel: inset 0 1px 1px rgba(255, 255, 255, 0.9);
+
+            --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: var(--bg-mesh);
+            background-attachment: fixed;
+            color: var(--text-body);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            padding: 32px 24px;
+        }
+
+        .container {
+            max-width: 1380px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        /* Double-Bezel Machined Glass Architecture */
+        .glass-shell {
+            background: var(--glass-shell);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid var(--border-shell);
+            border-radius: 24px;
+            padding: 6px;
+            box-shadow: var(--shadow-ambient);
+            transition: border-color 0.3s ease;
+        }
+
+        .glass-core {
+            background: var(--glass-core);
+            border: 1px solid var(--border-core);
+            border-radius: 18px;
+            padding: 24px 28px;
+            box-shadow: var(--inner-bevel);
+        }
+
+        /* Typography & Headings */
+        .font-serif {
+            font-family: var(--font-serif);
+        }
+
+        .italic-serif {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .section-eyebrow {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-eyebrow::before {
+            content: "";
+            display: inline-block;
+            width: 14px;
+            height: 1px;
+            background: var(--text-light);
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.015em;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-core);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        /* Header Navigation Bar */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .brand-meta {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+        }
+
+        .brand-logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-heading);
+        }
+
+        .brand-tagline {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            background: var(--accent-emerald-subtle);
+            border: 1px solid rgba(4, 120, 87, 0.2);
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--accent-emerald);
+            letter-spacing: 0.02em;
+        }
+
+        .pulse-indicator {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent-emerald);
+            box-shadow: 0 0 8px var(--accent-emerald);
+            animation: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .telemetry-chip {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: white;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            border: 1px solid var(--border-core);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .btn-estop-pill {
+            background: linear-gradient(135deg, #BE123C 0%, #9F1239 100%);
+            border: 1px solid rgba(190, 18, 60, 0.4);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(190, 18, 60, 0.25);
+            transition: all 0.25s var(--ease-fluid);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-estop-pill:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 18px rgba(190, 18, 60, 0.35);
+        }
+
+        .btn-estop-pill:active {
+            transform: scale(0.98);
+        }
+
+        /* SECTION 1: MICROPHONE INTERFACE */
+        .mic-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        @media (max-width: 820px) {
+            .mic-grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .custom-select {
+            width: 100%;
+            padding: 11px 16px;
+            background: white;
+            border: 1px solid var(--border-core);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .custom-select:focus {
+            border-color: var(--accent-indigo);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.08);
+        }
+
+        .btn-tactile {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s var(--ease-fluid);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .btn-mic-toggle {
+            background: white;
+            border: 1px solid var(--border-core);
+            color: var(--accent-indigo);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .btn-mic-toggle:hover {
+            background: var(--accent-indigo-subtle);
+            border-color: rgba(30, 64, 175, 0.3);
+        }
+
+        .btn-mic-toggle.active {
+            background: var(--accent-emerald);
+            color: white;
+            border-color: var(--accent-emerald);
+            box-shadow: 0 4px 14px rgba(4, 120, 87, 0.25);
+        }
+
+        .btn-refresh {
+            background: white;
+            border: 1px solid var(--border-core);
+            color: var(--text-muted);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .btn-refresh:hover {
+            background: #F8FAFC;
+            color: var(--text-heading);
+        }
+
+        /* Audio RMS Waveform Visualizer */
+        .audio-meter-panel {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid var(--border-core);
+            border-radius: 12px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .audio-meter-label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .audio-meter-track {
+            flex-grow: 1;
+            height: 8px;
+            background: #E2E8F0;
+            border-radius: 9999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .audio-meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #059669 0%, #2563EB 70%, #DC2626 100%);
+            width: 0%;
+            border-radius: 9999px;
+            transition: width 0.08s ease-out;
+        }
+
+        .audio-meter-readout {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            min-width: 75px;
+            text-align: right;
+        }
+
+        /* SECTION 2: COMMAND CARDS (MBAK TABINA) */
+        .commands-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+            gap: 16px;
+        }
+
+        .cmd-card {
+            background: white;
+            border: 1px solid var(--border-core);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.3s var(--ease-fluid);
+        }
+
+        .cmd-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(30, 64, 175, 0.3);
+            box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.07);
+        }
+
+        .cmd-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .cmd-name {
+            font-family: var(--font-mono);
+            font-size: 1.12rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .prio-tag {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.04em;
+        }
+
+        .prio-p0 {
+            background: var(--accent-crimson-subtle);
+            color: var(--accent-crimson);
+            border: 1px solid rgba(190, 18, 60, 0.2);
+        }
+
+        .prio-p1 {
+            background: var(--accent-emerald-subtle);
+            color: var(--accent-emerald);
+            border: 1px solid rgba(4, 120, 87, 0.2);
+        }
+
+        .prio-p2 {
+            background: var(--accent-amber-subtle);
+            color: var(--accent-amber);
+            border: 1px solid rgba(180, 83, 9, 0.2);
+        }
+
+        .cmd-description {
+            font-size: 0.82rem;
+            color: var(--text-body);
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .btn-cmd-action {
+            width: 100%;
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border: 1px solid var(--border-core);
+            background: #F8FAFC;
+            color: var(--text-heading);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-cmd-action:hover {
+            background: var(--text-heading);
+            color: white;
+            border-color: var(--text-heading);
+        }
+
+        .btn-cmd-action:active {
+            transform: scale(0.98);
+        }
+
+        /* SECTION 3: REAL-TIME RESPONSE BOX (MBAK TABINA) */
+        .live-response-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
+            border: 1px solid rgba(30, 64, 175, 0.18);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .live-response-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border-core);
+        }
+
+        .live-cmd-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .live-cmd-value {
+            font-family: var(--font-mono);
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--accent-indigo);
+        }
+
+        .live-transition-badge {
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid var(--border-core);
+            color: var(--text-heading);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .metrics-quad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 860px) {
+            .metrics-quad {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .metric-cell {
+            background: white;
+            border: 1px solid var(--border-core);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .metric-cell-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .metric-cell-value {
+            font-family: var(--font-mono);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.02em;
+        }
+
+        .metric-cell-unit {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .action-narrative {
+            background: white;
+            border-left: 3px solid var(--accent-indigo);
+            border-radius: 0 10px 10px 0;
+            padding: 12px 16px;
+            font-size: 0.84rem;
+            color: var(--text-heading);
+            font-weight: 600;
+            line-height: 1.45;
+            border-top: 1px solid var(--border-core);
+            border-right: 1px solid var(--border-core);
+            border-bottom: 1px solid var(--border-core);
+        }
+
+        /* ANATOMICAL SERVO BREAKDOWN */
+        .posture-breakdown-wrapper {
+            margin-top: 18px;
+            background: white;
+            border: 1px solid var(--border-core);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow-subtle);
+        }
+        .posture-breakdown-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .posture-header-title {
+            font-size: 0.76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-heading);
+        }
+        .posture-card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        @media (max-width: 860px) {
+            .posture-card-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .posture-subcard {
+            background: #f8fafc;
+            border: 1px solid var(--border-core);
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+        .subcard-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+        .subcard-desc {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .subcard-angles {
+            font-family: var(--font-mono);
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--accent-emerald);
+            background: rgba(4, 120, 87, 0.08);
+            border: 1px solid rgba(4, 120, 87, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* LIVE LINUX TERMINAL CONSOLE */
+        .terminal-console-box {
+            margin-top: 18px;
+            background: #090d16;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+        .terminal-topbar {
+            background: #0f172a;
+            padding: 10px 14px;
+            border-bottom: 1px solid #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .terminal-dots {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .term-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+        .term-title {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: #94a3b8;
+            margin-left: 8px;
+            font-weight: 600;
+        }
+        .term-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .term-btn:hover {
+            background: rgba(255, 255, 255, 0.16);
+            color: white;
+        }
+        .terminal-body {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 0.78rem;
+            line-height: 1.5;
+            padding: 14px;
+            max-height: 260px;
+            overflow-y: auto;
+            color: #cbd5e1;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* SECTION 4: DATASET ACQUISITION TABLE (SKRIPSI / PKM-KC) */
+        .table-action-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .table-intro {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            max-width: 650px;
+        }
+
+        .table-btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action-primary {
+            background: var(--accent-emerald);
+            color: white;
+            border: 1px solid var(--accent-emerald);
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(4, 120, 87, 0.2);
+            transition: all 0.2s var(--ease-fluid);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-action-primary:hover {
+            background: #065f46;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(4, 120, 87, 0.28);
+        }
+
+        .btn-action-secondary {
+            background: white;
+            color: var(--text-heading);
+            border: 1px solid var(--border-core);
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-action-secondary:hover {
+            background: #F8FAFC;
+        }
+
+        .btn-action-subtle {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            padding: 9px 14px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-subtle:hover {
+            color: var(--accent-crimson);
+            background: var(--accent-crimson-subtle);
+        }
+
+        .data-table-container {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border-core);
+            border-radius: 14px;
+            background: white;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .data-table th {
+            background: #F8FAFC;
+            padding: 13px 16px;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-core);
+            text-align: left;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #F1F5F9;
+            color: var(--text-heading);
+            font-family: var(--font-mono);
+        }
+
+        .data-table tbody tr:hover td {
+            background: #F8FAFC;
+        }
+
+        .icon-inline {
+            display: inline-block;
+            vertical-align: middle;
+            width: 15px;
+            height: 15px;
+            stroke-width: 2;
+            stroke: currentColor;
+            fill: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER / NAVIGATION (EDITORIAL LUXURY & LIGHT GLASSMORPHISM) -->
+        <div class="glass-shell">
+            <div class="glass-core nav-bar">
+                <div class="brand-meta">
+                    <div class="brand-logo">AERORA</div>
+                    <div class="brand-tagline">
+                        <span class="italic-serif">Pusat Akuisisi Data</span> Robot Seni Tari KRSTI
+                    </div>
+                </div>
+
+                <div class="nav-controls">
+                    <div class="telemetry-chip">
+                        CPU: <span id="teleCpu" style="font-weight: 700; color: var(--text-heading);">0%</span>
+                        <span style="color: var(--border-core); margin: 0 4px;">|</span>
+                        RAM: <span id="teleRam" style="font-weight: 700; color: var(--text-heading);">0%</span>
+                    </div>
+
+                    <button class="btn-estop-pill" onclick="execVoiceCommand('STOP')">
+                        <svg class="icon-inline" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span>E-STOP (P0)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 1: AUDIO & MIKROFON (SESUAI REQUEST USER: PILIH MIC DI WEB, BUKAN TERMINAL) -->
+        <div class="glass-shell">
+            <div class="glass-core">
+                <div class="section-header">
+                    <div>
+                        <div class="section-eyebrow">Modul 01 / Antarmuka Akustik</div>
+                        <h2 class="section-title">
+                            Kalibrasi Perangkat & <span class="italic-serif">Input Mikrofon</span>
+                        </h2>
+                    </div>
+                    <span style="font-size: 0.74rem; font-weight: 600; color: var(--text-muted); font-family: var(--font-mono);">
+                        DSP Inference Engine @ 22,050 Hz
+                    </span>
+                </div>
+
+                <div class="mic-grid-layout">
+                    <select id="micSelect" class="custom-select" onchange="onSelectMicDevice(this.value)">
+                        <option value="">Mendeteksi perangkat mikrofon di laptop...</option>
+                    </select>
+
+                    <button id="btnToggleMic" class="btn-tactile btn-mic-toggle" onclick="toggleMicListening()">
+                        <svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+                        <span>Mulai Dengarkan Mikrofon</span>
+                    </button>
+
+                    <button class="btn-tactile btn-refresh" onclick="loadMicDevices()">
+                        <svg class="icon-inline" viewBox="0 0 24 24"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+                        <span>Segarkan Mic</span>
+                    </button>
+                </div>
+
+                <!-- Live Audio Signal Meter -->
+                <div class="audio-meter-panel">
+                    <span class="audio-meter-label">Level Sinyal Suara</span>
+                    <div class="audio-meter-track">
+                        <div id="audioMeterFill" class="audio-meter-fill"></div>
+                    </div>
+                    <span id="txtAudioRMS" class="audio-meter-readout">0.0000 RMS</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: PANDUAN & PENGUJIAN PERINTAH VOKAL (REQUEST MBAK TABINA) -->
+        <div class="glass-shell">
+            <div class="glass-core">
+                <div class="section-header">
+                    <div>
+                        <div class="section-eyebrow">Modul 02 / Matriks Penjadwalan Tugas</div>
+                        <h2 class="section-title">
+                            Katalog Perintah <span class="italic-serif">& Keterangan Fungsi</span>
+                        </h2>
+                    </div>
+                    <span style="font-size: 0.74rem; font-weight: 600; color: var(--text-muted); font-family: var(--font-mono);">
+                        P0 Preemptive | P1 Dance | P2 Static Pose
+                    </span>
+                </div>
+
+                <div class="commands-matrix">
+                    <!-- MULAI -->
+                    <div class="cmd-card">
+                        <div>
+                            <div class="cmd-card-header">
+                                <span class="cmd-name" style="color: var(--accent-emerald);">MULAI</span>
+                                <span class="prio-tag prio-p1">P1 Tari</span>
+                            </div>
+                            <p class="cmd-description">
+                                Memulai alunan musik instrumen gamelan KRSTI dan mengeksekusi baris koreografi dari pose awal (Row 1).
+                            </p>
+                        </div>
+                        <button class="btn-cmd-action" onclick="execVoiceCommand('MULAI')">
+                            <svg class="icon-inline" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            <span>Uji 'MULAI'</span>
+                        </button>
+                    </div>
+
+                    <!-- STOP -->
+                    <div class="cmd-card" style="border-color: rgba(190, 18, 60, 0.25);">
+                        <div>
+                            <div class="cmd-card-header">
+                                <span class="cmd-name" style="color: var(--accent-crimson);">STOP</span>
+                                <span class="prio-tag prio-p0">P0 Preemptif</span>
+                            </div>
+                            <p class="cmd-description">
+                                Interupsi instan prioritas tertinggi. Memutus eksekusi tari seketika (&lt;1.5 ms), mematikan audio, dan mengunci posisi netral aman 150&deg;.
+                            </p>
+                        </div>
+                        <button class="btn-cmd-action" style="color: var(--accent-crimson); border-color: rgba(190, 18, 60, 0.3);" onclick="execVoiceCommand('STOP')">
+                            <svg class="icon-inline" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+                            <span>Uji 'STOP'</span>
+                        </button>
+                    </div>
+
+                    <!-- LANJUT -->
+                    <div class="cmd-card">
+                        <div>
+                            <div class="cmd-card-header">
+                                <span class="cmd-name" style="color: var(--accent-indigo);">LANJUT</span>
+                                <span class="prio-tag prio-p1">P1 Tari</span>
+                            </div>
+                            <p class="cmd-description">
+                                Melanjutkan sekuens tarian dari posisi pose terakhir yang terhenti (resume) tanpa mengulang dari awal babak.
+                            </p>
+                        </div>
+                        <button class="btn-cmd-action" onclick="execVoiceCommand('LANJUT')">
+                            <svg class="icon-inline" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+                            <span>Uji 'LANJUT'</span>
+                        </button>
+                    </div>
+
+                    <!-- BERDIRI -->
+                    <div class="cmd-card">
+                        <div>
+                            <div class="cmd-card-header">
+                                <span class="cmd-name" style="color: var(--accent-amber);">BERDIRI</span>
+                                <span class="prio-tag prio-p2">P2 Pose</span>
+                            </div>
+                            <p class="cmd-description">
+                                Menyelaraskan seluruh 15 sendi robot ke postur berdiri tegak simetris (150&deg;) sebagai sikap siap sebelum bertanding.
+                            </p>
+                        </div>
+                        <button class="btn-cmd-action" onclick="execVoiceCommand('BERDIRI')">
+                            <svg class="icon-inline" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><path d="m9 20 3-6 3 6"/><path d="M6 8h12"/><path d="M12 7v7"/></svg>
+                            <span>Uji 'BERDIRI'</span>
+                        </button>
+                    </div>
+
+                    <!-- DUDUK -->
+                    <div class="cmd-card">
+                        <div>
+                            <div class="cmd-card-header">
+                                <span class="cmd-name" style="color: var(--accent-amber);">DUDUK</span>
+                                <span class="prio-tag prio-p2">P2 Pose</span>
+                            </div>
+                            <p class="cmd-description">
+                                Menekuk sendi panggul dan lutut ke postur duduk rendah stabil saat jeda babak perlombaan atau selesai bertanding.
+                            </p>
+                        </div>
+                        <button class="btn-cmd-action" onclick="execVoiceCommand('DUDUK')">
+                            <svg class="icon-inline" viewBox="0 0 24 24"><circle cx="8" cy="5" r="2"/><path d="M8 7v7h8v8"/></svg>
+                            <span>Uji 'DUDUK'</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: OUTPUT REAL-TIME RESPONS SISTEM (REQUEST MBAK TABINA) -->
+        <div class="glass-shell">
+            <div class="glass-core">
+                <div class="section-header">
+                    <div>
+                        <div class="section-eyebrow">Modul 03 / Telemetri & Output Respons</div>
+                        <h2 class="section-title">
+                            Respons Sistem <span class="italic-serif">& Transisi Status</span>
+                        </h2>
+                    </div>
+                    <span id="txtStatePill" class="prio-tag prio-p2">STATE: IDLE</span>
+                </div>
+
+                <div class="live-response-box">
+                    <div class="live-response-head">
+                        <div>
+                            <div class="live-cmd-label">Perintah Vokal Terakhir</div>
+                            <div id="txtLiveCmd" class="live-cmd-value">STANDBY</div>
+                        </div>
+                        <div>
+                            <div class="live-cmd-label">Perpindahan Status Robot</div>
+                            <div id="txtLiveTransition" class="live-transition-badge">IDLE &rarr; IDLE</div>
+                        </div>
+                    </div>
+
+                    <div class="metrics-quad">
+                        <div class="metric-cell">
+                            <div class="metric-cell-title">Voice Latency</div>
+                            <div class="metric-cell-value">
+                                <span id="txtVoiceLat">0.0</span> <span class="metric-cell-unit">ms</span>
+                            </div>
+                        </div>
+                        <div class="metric-cell">
+                            <div class="metric-cell-title">Preempt Latency</div>
+                            <div class="metric-cell-value" style="color: var(--accent-crimson);">
+                                <span id="txtPreemptLat">0.0</span> <span class="metric-cell-unit">ms</span>
+                            </div>
+                        </div>
+                        <div class="metric-cell">
+                            <div class="metric-cell-title">AI Confidence</div>
+                            <div class="metric-cell-value" style="color: var(--accent-emerald);">
+                                <span id="txtConfidence">100.0</span> <span class="metric-cell-unit">%</span>
+                            </div>
+                        </div>
+                        <div class="metric-cell">
+                            <div class="metric-cell-title">Pose Aktif Terhenti</div>
+                            <div id="txtActivePoseShort" class="metric-cell-value" style="font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                -
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="txtActionBanner" class="action-narrative">
+                        Sistem siaga. Silakan ucapkan perintah vokal pada mikrofon terhubung atau tekan salah satu tombol uji di atas.
+                    </div>
+
+                    <!-- ANATOMICAL SERVO BREAKDOWN (SESUAI POSTURE LOOKUP DECODER) -->
+                    <div class="posture-breakdown-wrapper">
+                        <div class="posture-breakdown-header">
+                            <span class="posture-header-title" id="txtPostureTitle">KUNCIAN SUDUT ANATOMI ROBOT (SAFE HOLD POSTURE)</span>
+                            <span class="prio-tag prio-p0" id="txtFailSafeBadge">FAIL-SAFE: SIAP_BERDIRI_TEGAK</span>
+                        </div>
+                        <div class="posture-card-grid">
+                            <div class="posture-subcard">
+                                <div class="subcard-title">KEPALA (Pan / Tilt)</div>
+                                <div class="subcard-desc" id="txtKepalaDesc">Hadap Depan Tegak</div>
+                                <div class="subcard-angles" id="txtKepalaAngles">[150, 150]</div>
+                            </div>
+                            <div class="posture-subcard">
+                                <div class="subcard-title">TANGAN KANAN (Bahu / Siku)</div>
+                                <div class="subcard-desc" id="txtKananDesc">Pegang Selendang Bawah</div>
+                                <div class="subcard-angles" id="txtKananAngles">[148, 152, 140]</div>
+                            </div>
+                            <div class="posture-subcard">
+                                <div class="subcard-title">TANGAN KIRI (Bahu / Siku)</div>
+                                <div class="subcard-desc" id="txtKiriDesc">Pegang Selendang Bawah</div>
+                                <div class="subcard-angles" id="txtKiriAngles">[148, 152, 140]</div>
+                            </div>
+                            <div class="posture-subcard">
+                                <div class="subcard-title">KAKI / BADAN (Lutut / Engkel)</div>
+                                <div class="subcard-desc" id="txtKakiDesc">Mendak Diam Posisi Siap</div>
+                                <div class="subcard-angles" id="txtKakiAngles">[150, 150, 150]</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LIVE LINUX TERMINAL CONSOLE -->
+                    <div class="terminal-console-box">
+                        <div class="terminal-topbar">
+                            <div class="terminal-dots">
+                                <span class="term-dot dot-red"></span>
+                                <span class="term-dot dot-yellow"></span>
+                                <span class="term-dot dot-green"></span>
+                                <span class="term-title">adits_unified_voice_dsp_internal.py &mdash; Live Task Scheduler Console</span>
+                            </div>
+                            <button class="term-btn" onclick="copyTerminalText()">Salin Log</button>
+                        </div>
+                        <div id="terminalBody" class="terminal-body">[ADITS WEB HUB] ENGINE VOICE AI & TASK SCHEDULER INITIALIZED
+[P0: PREEMPT_STOP] | [P1: START/RESUME DANCE] | [P2: POSTURE TRANSLATION]
+Sistem siaga. Menunggu perintah vokal dari mikrofon Bluetooth RHB-A005...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: TABEL AKUISISI DATA OTOMATIS (SKRIPSI / LAPORAN PKM-KC) -->
+        <div class="glass-shell">
+            <div class="glass-core">
+                <div class="table-action-bar">
+                    <div>
+                        <div class="section-eyebrow">Modul 04 / Log Eksperimen Saintifik</div>
+                        <h2 class="section-title">
+                            Akuisisi Data <span class="italic-serif">Eksperimen</span>
+                        </h2>
+                        <p class="table-intro">
+                            Tabel ini mencatat seluruh data latensi dan interupsi secara otomatis. Klik tombol di kanan untuk menyalin seluruh baris ke lembar kerja Excel laporan.
+                        </p>
+                    </div>
+
+                    <div class="table-btn-group">
+                        <button class="btn-action-primary" onclick="copyTableToClipboard()">
+                            <svg class="icon-inline" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            <span>Salin ke Excel (Ctrl + V)</span>
+                        </button>
+                        <button class="btn-action-secondary" onclick="downloadCSV()">
+                            <svg class="icon-inline" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            <span>Unduh CSV</span>
+                        </button>
+                        <button class="btn-action-subtle" onclick="clearLogs()">
+                            <span>Reset Log</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Trial #</th>
+                                <th>Timestamp</th>
+                                <th>Command</th>
+                                <th>Priority</th>
+                                <th>State Transition</th>
+                                <th>Voice Latency</th>
+                                <th>Preempt Latency</th>
+                                <th>Active Pose</th>
+                                <th>Confidence</th>
+                                <th>Aksi Sistem / Keterangan Ilmiah</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logTableBody">
+                            <tr>
+                                <td colspan="10" style="text-align: center; color: var(--text-muted); padding: 32px;">
+                                    Belum ada data pengujian yang tercatat. Silakan ucapkan perintah suara atau klik tombol uji.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let cachedLogs = [];
+        let isMicListening = false;
+
+        function initWebSocket() {
+            const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
+            const wsUrl = `${proto}//${window.location.host}/ws`;
+            ws = new WebSocket(wsUrl);
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    renderDashboard(data);
+                } catch (e) {
+                    console.error("Parse WS error:", e);
+                }
+            };
+
+            ws.onclose = () => {
+                setTimeout(initWebSocket, 2000);
+            };
+        }
+
+        function renderDashboard(data) {
+            // 1. Telemetri
+            if (data.telemetry) {
+                document.getElementById("teleCpu").innerText = `${data.telemetry.cpu_usage}%`;
+                document.getElementById("teleRam").innerText = `${data.telemetry.ram_usage}%`;
+            }
+
+            // 2. Audio Mic Status & Live RMS Meter
+            if (data.audio) {
+                const a = data.audio;
+                isMicListening = a.is_listening;
+                const btn = document.getElementById("btnToggleMic");
+                if (isMicListening) {
+                    btn.className = "btn-tactile btn-mic-toggle active";
+                    btn.innerHTML = `<svg class="icon-inline" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg><span>Hentikan Mikrofon</span>`;
+                } else {
+                    btn.className = "btn-tactile btn-mic-toggle";
+                    btn.innerHTML = `<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg><span>Mulai Dengarkan Mikrofon</span>`;
+                }
+
+                // Update RMS Meter Bar
+                document.getElementById("audioMeterFill").style.width = `${a.rms_pct}%`;
+                document.getElementById("txtAudioRMS").innerText = `${a.live_rms.toFixed(4)} RMS`;
+            }
+
+            // 3. Experiment Log & Latest Event
+            if (data.experiment_log) {
+                cachedLogs = data.experiment_log.logs || [];
+                renderLatestEvent(data.experiment_log.latest_event);
+                renderLogTable(cachedLogs);
+            }
+
+            // 4. Voice AI Posture Breakdown & Terminal Logs
+            if (data.voice) {
+                if (data.voice.posture) {
+                    renderPostureBreakdown(data.voice.posture);
+                }
+                if (data.voice.terminal_logs) {
+                    renderTerminalConsole(data.voice.terminal_logs);
+                }
+            }
+        }
+
+        function renderPostureBreakdown(p) {
+            if (!p) return;
+            const titleEl = document.getElementById("txtPostureTitle");
+            if (titleEl && p.title) titleEl.innerText = p.title;
+
+            const fsBadge = document.getElementById("txtFailSafeBadge");
+            if (fsBadge && p.fail_safe) {
+                fsBadge.innerText = `FAIL-SAFE: ${p.fail_safe}`;
+                if (p.fail_safe.includes("TUTUP") || p.fail_safe.includes("STOP")) {
+                    fsBadge.className = "prio-tag prio-p0";
+                } else if (p.fail_safe.includes("SIAP") || p.fail_safe.includes("BERDIRI")) {
+                    fsBadge.className = "prio-tag prio-p2";
+                } else {
+                    fsBadge.className = "prio-tag prio-p1";
+                }
+            }
+
+            if (p.kepala_desc) document.getElementById("txtKepalaDesc").innerText = p.kepala_desc;
+            if (p.kepala_angles) document.getElementById("txtKepalaAngles").innerText = JSON.stringify(p.kepala_angles);
+
+            if (p.kanan_desc) document.getElementById("txtKananDesc").innerText = p.kanan_desc;
+            if (p.kanan_angles) document.getElementById("txtKananAngles").innerText = JSON.stringify(p.kanan_angles);
+
+            if (p.kiri_desc) document.getElementById("txtKiriDesc").innerText = p.kiri_desc;
+            if (p.kiri_angles) document.getElementById("txtKiriAngles").innerText = JSON.stringify(p.kiri_angles);
+
+            if (p.kaki_desc) document.getElementById("txtKakiDesc").innerText = p.kaki_desc;
+            if (p.kaki_angles) document.getElementById("txtKakiAngles").innerText = JSON.stringify(p.kaki_angles);
+        }
+
+        let lastTerminalText = "";
+        function renderTerminalConsole(lines) {
+            if (!lines || lines.length === 0) return;
+            const raw = lines.join("\n");
+            if (raw === lastTerminalText) return;
+            lastTerminalText = raw;
+
+            const term = document.getElementById("terminalBody");
+            if (!term) return;
+
+            const colored = lines.map(line => {
+                let l = line.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                if (l.includes("[ADAPTIVE SCHEDULER]")) {
+                    l = `<span style="color: #fbbf24; font-weight: 800;">${l}</span>`;
+                } else if (l.includes("[TASK P1: EMERGENCY_STOP]")) {
+                    l = `<span style="color: #f43f5e; font-weight: 800;">${l}</span>`;
+                } else if (l.includes("[TASK P2: CROUCH_POSTURE]")) {
+                    l = `<span style="color: #38bdf8; font-weight: 800;">${l}</span>`;
+                } else if (l.includes("[TASK P2: STAND_POSTURE]") || l.includes("[TASK P1: START_DANCE]")) {
+                    l = `<span style="color: #34d399; font-weight: 800;">${l}</span>`;
+                } else if (l.includes("[LATENSI E2E]")) {
+                    l = `<span style="color: #c084fc; font-weight: 700;">${l}</span>`;
+                } else if (l.includes("Status Fail-Safe")) {
+                    l = `<span style="color: #fb7185; font-weight: 700;">${l}</span>`;
+                } else if (l.includes("===")) {
+                    l = `<span style="color: #475569;">${l}</span>`;
+                }
+                return l;
+            }).join("\n");
+
+            term.innerHTML = colored;
+            term.scrollTop = term.scrollHeight;
+        }
+
+        function copyTerminalText() {
+            const term = document.getElementById("terminalBody");
+            if (term) {
+                navigator.clipboard.writeText(term.innerText).then(() => {
+                    showToast("Log terminal berhasil disalin!");
+                });
+            }
+        }
+
+        function renderLatestEvent(ev) {
+            if (!ev) return;
+            const cmdEl = document.getElementById("txtLiveCmd");
+            cmdEl.innerText = ev.command;
+            if (ev.command === "STOP") {
+                cmdEl.style.color = "var(--accent-crimson)";
+            } else if (ev.command === "MULAI" || ev.command === "LANJUT") {
+                cmdEl.style.color = "var(--accent-emerald)";
+            } else {
+                cmdEl.style.color = "var(--accent-indigo)";
+            }
+
+            document.getElementById("txtLiveTransition").innerText = ev.transition || "-";
+            document.getElementById("txtVoiceLat").innerText = ev.voice_latency_ms;
+            document.getElementById("txtPreemptLat").innerText = ev.preempt_latency_ms;
+            document.getElementById("txtConfidence").innerText = ev.confidence;
+            document.getElementById("txtActivePoseShort").innerText = `Row ${ev.active_row} (${ev.active_pose_name})`;
+            document.getElementById("txtActionBanner").innerText = ev.system_action || "-";
+
+            const statePill = document.getElementById("txtStatePill");
+            statePill.innerText = `STATE: ${ev.new_state}`;
+            if (ev.new_state.includes("STOP")) {
+                statePill.className = "prio-tag prio-p0";
+            } else if (ev.new_state.includes("DANC")) {
+                statePill.className = "prio-tag prio-p1";
+            } else {
+                statePill.className = "prio-tag prio-p2";
+            }
+        }
+
+        function renderLogTable(logs) {
+            const tbody = document.getElementById("logTableBody");
+            if (!logs || logs.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" style="text-align: center; color: var(--text-muted); padding: 32px;">
+                            Belum ada data pengujian yang tercatat. Silakan ucapkan perintah suara atau klik tombol uji.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = logs.map(l => {
+                const prioClass = l.priority === "P0" ? "prio-p0" : (l.priority === "P1" ? "prio-p1" : "prio-p2");
+                return `
+                    <tr>
+                        <td style="font-weight: 700; color: var(--text-muted);">#${l.id}</td>
+                        <td style="color: var(--text-body); font-weight: 600;">${l.timestamp}</td>
+                        <td style="font-weight: 800; color: var(--text-heading);">${l.command}</td>
+                        <td><span class="prio-tag ${prioClass}">${l.priority}</span></td>
+                        <td style="font-weight: 600; color: var(--accent-indigo);">${l.transition}</td>
+                        <td>${l.voice_latency_ms} ms</td>
+                        <td style="${l.preempt_latency_ms > 0 ? 'color: var(--accent-crimson); font-weight: 700;' : ''}">${l.preempt_latency_ms} ms</td>
+                        <td>Row ${l.active_row} (${l.active_pose_name})</td>
+                        <td style="color: var(--accent-emerald); font-weight: 700;">${l.confidence}%</td>
+                        <td style="color: var(--text-muted); max-width: 340px; overflow: hidden; text-overflow: ellipsis;">${l.system_action}</td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        // Audio Device Management
+        async function loadMicDevices() {
+            try {
+                const res = await fetch("/api/audio/devices");
+                const data = await res.json();
+                const sel = document.getElementById("micSelect");
+                sel.innerHTML = "";
+                if (!data.devices || data.devices.length === 0) {
+                    sel.innerHTML = '<option value="">Tidak ada mikrofon terdeteksi</option>';
+                    return;
+                }
+                data.devices.forEach(d => {
+                    const opt = document.createElement("option");
+                    opt.value = d.index;
+                    opt.innerText = `[Perangkat ${d.index}] ${d.name} (${d.sample_rate} Hz)`;
+                    sel.appendChild(opt);
+                });
+            } catch (e) {
+                console.error("Gagal load mic devices:", e);
+            }
+        }
+
+        async function onSelectMicDevice(idx) {
+            if (!idx) return;
+            await fetch("/api/audio/select", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({index: parseInt(idx)})
+            });
+        }
+
+        async function toggleMicListening() {
+            await fetch("/api/audio/toggle", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({enable: !isMicListening})
+            });
+        }
+
+        // Actions
+        async function execVoiceCommand(cmd) {
+            await fetch("/api/voice/trigger", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({command: cmd})
+            });
+        }
+
+        function downloadCSV() {
+            window.location.href = "/api/experiment/export_csv";
+        }
+
+        function copyTableToClipboard() {
+            if (!cachedLogs || cachedLogs.length === 0) {
+                alert("Belum ada data pengujian untuk disalin.");
+                return;
+            }
+
+            const headers = ["Trial_ID", "Timestamp", "Command", "Priority", "Transition", "Voice_Latency_ms", "Preemption_Latency_ms", "Active_Pose", "Confidence_Pct", "System_Action"];
+            const rows = cachedLogs.map(l => [
+                l.id, l.timestamp, l.command, l.priority, l.transition,
+                l.voice_latency_ms, l.preempt_latency_ms, `Row ${l.active_row} (${l.active_pose_name})`,
+                l.confidence, l.system_action.replace(/\t/g, " ")
+            ].join("\t"));
+
+            const tsvContent = [headers.join("\t"), ...rows].join("\n");
+            navigator.clipboard.writeText(tsvContent).then(() => {
+                alert("Data berhasil disalin ke Clipboard!\nSilakan buka lembar kerja Excel laporan dan tekan Ctrl + V.");
+            }).catch(e => {
+                alert("Gagal menyalin: " + e);
+            });
+        }
+
+        async function clearLogs() {
+            if (confirm("Reset seluruh data log pengujian?")) {
+                await fetch("/api/experiment/clear", {method: "POST"});
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            loadMicDevices();
+            initWebSocket();
+        });
+    </script>
+</body>
+</html>
