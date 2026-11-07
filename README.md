@@ -21,7 +21,7 @@
 
 ## 📌 1. Latar Belakang & Urgensi Rekayasa
 
-Pada kompetisi **Kontes Robot Seni Tari Indonesia (KRSTI)**, robot humanoid tari (18 - 20 DOF) dituntut untuk sinkron secara presisi terhadap ketukan musik latar sembari tetap patuh merespons instruksi vokal juri (*Voice Commands*). Komputer *onboard* (Raspberry Pi 4) menghadapi dilema beban kerja ganda (*Dual-Workload Dilemma*):
+Pada kompetisi **Kontes Robot Seni Tari Indonesia (KRSTI)**, robot humanoid tari (18 - 20 DOF) dituntut untuk sinkron secara presisi terhadap ketukan musik latar sembari tetap patuh merespons instruksi vokal juri (*Voice Commands*). Komputer *onboard* (Raspberry Pi 4 / Pi 5) menghadapi dilema beban kerja ganda (*Dual-Workload Dilemma*):
 
 1. **Komputasi Rutin Berat (P3):** Ekstraksi spektral audio streaming (STFT / Chromagram) dan interpolasi trajektori kinematika tari dengan durasi blok rata-rata **2.0 detik (2000 ms)**.
 2. **Interupsi Darurat Kritis (P0):** Perintah darurat `STOP` (misalnya saat robot hilang keseimbangan atau aba-aba wasit) yang membutuhkan respons instan dalam **< 50 ms**.
@@ -101,7 +101,7 @@ Pengujian komparasi performa latensi respons tugas darurat (`STOP`) dilakukan se
 Model klasifikasi vokal dilatih menggunakan dataset 5-kelas realistis dengan augmentasi *ambient noise* ruangan dan ekstraksi 47 fitur akustik riil (MFCC, Spectral Centroid, Rolloff, ZCR, Bandwidth, Chroma STFT, Tempo).
 
 * **Akurasi Model:** **97.33%**
-* **Inference Latency di Raspberry Pi 4:** **~3.2 ms**
+* **Inference Latency di Raspberry Pi:** **~1.3 s.d. 3.2 ms**
 * **Fitur Utama:** *Speech-Island Isolation* untuk mengeliminasi desis mikrofon di awal/akhir sampel sehingga tidak bias mengklasifikasikan hening sebagai perintah `STOP`.
 
 <div align="center">
@@ -118,7 +118,7 @@ Sistem telah melalui tahapan verifikasi hardware riil secara end-to-end pada **R
 <div align="center">
   <table>
     <tr>
-      <td align="center"><img src="DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/00_eksekusi_setup_rpi4_otomatis.png" width="380"/><br/><b>1. Instalasi Otomatis (setup_rpi4.sh)</b></td>
+      <td align="center"><img src="DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/00_eksekusi_setup_rpi4_otomatis.png" width="380"/><br/><b>1. Instalasi Otomatis (setup_raspy.sh)</b></td>
       <td align="center"><img src="DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/02_verifikasi_modul_core.png" width="380"/><br/><b>2. Verifikasi Core Engine & AI</b></td>
     </tr>
     <tr>
@@ -127,29 +127,30 @@ Sistem telah melalui tahapan verifikasi hardware riil secara end-to-end pada **R
     </tr>
   </table>
   <img src="DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/05_eksekusi_adits_grand_unified.png" width="780"/><br/>
-  <p><em>Gambar 3. Eksekusi Grand Unified Telemetry Hub & Real-Time Monitoring di Raspberry Pi 4.</em></p>
+  <p><em>Gambar 3. Eksekusi Grand Unified Telemetry Hub & Real-Time Monitoring di Raspberry Pi.</em></p>
 </div>
 
 ---
 
-## 📁 6. Struktur Direktori Repositori
+## 📁 6. Struktur Direktori Repositori (Clean & Curated)
 
 ```
 UM-Aerora-ADITS/
 ├── README.md                                  # Dokumentasi utama repositori
-├── PANDUAN_RASPBERRY_PI4.md                   # Panduan teknis pengkabelan & wiring hardware
-├── PANDUAN_JALANKAN.txt                       # Catatan operasional cepat
+├── .gitignore                                 # Filter ketat file sementara & cache
+├── PANDUAN_RASPBERRY_PI.md                    # Panduan teknis pengkabelan & instalasi hardware
+├── PANDUAN_JALANKAN.txt                       # Catatan operasional ringkas
 ├── requirements.txt                           # Dependensi pustaka Python
-├── setup_rpi4.sh                              # Skrip instalasi otomatis 1-klik untuk Raspberry Pi 4
-├── setup_rpi5.sh                              # Skrip instalasi otomatis untuk Raspberry Pi 5
-├── run_raspy.sh                               # Skrip shortcut menjalankan sistem di terminal
+├── setup_raspy.sh                             # Skrip instalasi otomatis universal (Pi 4 & Pi 5)
+├── test_hardware.py                           # Skrip diagnostik CPU, Suhu, Mic RMS, U2D2, dan AI
+├── test_dynamixel_xl320_scan.py               # Pemindai baudrate & ID motor servo Dynamixel
+├── run_raspy.sh                               # Skrip shortcut menjalankan sistem di Raspberry Pi
 ├── run_web_dashboard.py                       # Entry-point Web Telemetry Dashboard (Port 5000)
 │
 ├── adits_adaptive_scheduler.py                # Engine Preemptive Priority Queueing ADITS
 ├── benchmark_scheduler_ttest.py               # Skrip pengujian 30 trial berpasangan & uji-t
 ├── posture_lookup_decoder.py                  # Decoder pose koreografi tari ke ID Servo 1-15
-├── test_rpi4_hardware.py                      # Uji diagnostik USB Mic & U2D2 serial
-├── test_dynamixel_xl320_scan.py               # Pemindai baudrate & ID motor servo Dynamixel
+├── adits_unified_voice_dsp_internal.py        # Kontroler terminal Grand Unified (Voice AI + DSP)
 │
 ├── model_command_classifier_5kelas.pkl        # Model terlatih LightGBM Voice AI (Akurasi 97.33%)
 ├── model_robot_tari_lightgbm_95percent.pkl    # Model interpolasi trajektori gerak tari
@@ -159,6 +160,11 @@ UM-Aerora-ADITS/
 ├── hasil_uji_t_scheduler.xlsx                 # Data mentah 30 trial & ringkasan statistik
 ├── scheduler_ttest_comparison.png             # Visualisasi Boxplot perbandingan latensi
 ├── confusion_matrix_command_5kelas.png        # Visualisasi Matriks Konfusi Voice AI
+│
+├── gerakan_baru/                              # File CSV sekuens koreografi gerak tari robot
+│   ├── Pembuka_BaruAF.csv
+│   ├── PengawakAF.csv
+│   └── ... (16 file koreografi tari)
 │
 ├── web/                                       # Aplikasi Web Telemetry Dashboard (Flask + WebSocket)
 │   ├── app.py                                 # Server backend Flask & REST API
@@ -182,22 +188,22 @@ UM-Aerora-ADITS/
 
 ---
 
-## 🚀 7. Panduan Cepat Menjalankan Sistem di Raspberry Pi 4
+## 🚀 7. Panduan Cepat Menjalankan Sistem di Raspberry Pi
 
 ### 1. Hubungkan Perangkat Keras
-* **Raspberry Pi 4:** Port USB-C terhubung ke Adaptor 5V 3A.
-* **ROBOTIS U2D2:** Tancapkan ke Port USB 3.0 (Biru) Raspberry Pi 4.
-* **USB Mic / Receiver AB13X:** Tancapkan ke Port USB 2.0 (Hitam) Raspberry Pi 4.
+* **Raspberry Pi:** Port USB-C terhubung ke Adaptor Resmi 5V.
+* **ROBOTIS U2D2:** Tancapkan ke Port USB 3.0 (Biru) Raspberry Pi.
+* **USB Mic / Receiver AB13X:** Tancapkan ke Port USB 2.0 (Hitam) Raspberry Pi.
 * **PCB Ungu AERORA:** Hubungkan Adaptor 12V (2A - 5A) ke DC Jack PCB, geser saklar ke posisi **ON** (LED menyala) untuk menyuplai daya **7.4V** ke motor servo Dynamixel XL-320.
 
-### 2. Instalasi Dependensi Otomatis (1-Klik)
-Buka terminal di Raspberry Pi 4:
+### 2. Instalasi Dependensi Otomatis (1-Klik Universal)
+Buka terminal di Raspberry Pi:
 ```bash
 cd ~/UM-Aerora-ADITS
-chmod +x setup_rpi4.sh
-./setup_rpi4.sh
+chmod +x setup_raspy.sh
+./setup_raspy.sh
 ```
-*Skrip ini otomatis menginstal PortAudio, ALSA, Dynamixel SDK, membuat `venv`, dan menyetel FTDI Latency Timer U2D2 ke 1 ms.*
+*Skrip ini otomatis mendeteksi model board (Pi 4 atau Pi 5), menginstal PortAudio, ALSA, Dynamixel SDK, membuat `venv`, dan menyetel FTDI Latency Timer U2D2 ke 1 ms.*
 
 ### 3. Jalankan Web Dashboard & Voice AI Hub
 ```bash
