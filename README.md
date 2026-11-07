@@ -192,7 +192,6 @@ UM-Aerora-ADITS/
 │       └── index.html                         # Antarmuka Glassmorphism (Editorial Luxury UI)
 │
 ├── .gitignore                                 # Filter Git untuk file cache & temporary
-├── DOKUMEN_AUDIT_DAN_LAPORAN_SISTEM.md        # Matriks kepatuhan proposal PKM-KC
 ├── PANDUAN_JALANKAN.txt                       # Catatan operasional ringkas
 ├── PANDUAN_RASPBERRY_PI.md                    # Panduan teknis hardware universal
 ├── README.md                                  # Dokumentasi utama repositori
