@@ -27,8 +27,7 @@
   - [7.3 Uji Diagnostik Hardware](#3-uji-diagnostik-hardware)
   - [7.4 Ragam Mode Operasi Sistem](#4-ragam-mode-operasi-sistem)
 - [8. Spesifikasi REST API & WebSocket Telemetri](#-8-spesifikasi-rest-api--websocket-telemetri)
-- [9. Panduan Pemecahan Masalah (Troubleshooting & FAQ)](#-9-panduan-pemecahan-masalah-troubleshooting--faq)
-- [10. Lisensi & Legalitas Proyek](#-10-lisensi--legalitas-proyek)
+- [9. Lisensi & Legalitas Proyek](#-9-lisensi--legalitas-proyek)
 
 ---
 
@@ -292,19 +291,7 @@ Server Web Dashboard menyediakan antarmuka REST API dan WebSocket untuk integras
 
 ---
 
-## 🛠️ 9. Panduan Pemecahan Masalah (Troubleshooting & FAQ)
-
-| Gejala Masalah | Akar Masalah | Solusi Cepat |
-|---|---|---|
-| `[Errno 13] Permission denied: '/dev/ttyUSB0'` | Pengguna Linux belum masuk ke grup `dialout` | Jalankan: `sudo usermod -a -G dialout $USER && newgrp dialout` |
-| Pergerakan servo patah-patah (*Jitter* > 15 ms) | *FTDI Latency Timer* kernel Linux masih default di 16 ms | Cek via `cat /sys/bus/usb-serial/devices/ttyUSB0/latency_timer`. Jalankan `echo 1 \| sudo tee /sys/bus/usb-serial/devices/ttyUSB0/latency_timer` atau jalankan ulang `./setup_raspy.sh` |
-| Mikrofon Nirkabel AB13X tidak terdeteksi | Port USB belum terdaftar di ALSA | Cabut dan colokkan kembali receiver USB mic. Cek daftar perangkat via `arecord -l`, lalu jalankan `python test_hardware.py` |
-| Muncul pesan `ALSA lib pcm.c:... underrun occurred` | Latensi audio buffer ALSA standar Linux non-RTOS | Peringatan ini wajar dan tidak mempengaruhi akurasi LightGBM berkat buffer isolasi *Speech-Island* 2048 sampel |
-| Port 5000 sudah terpakai (*Address already in use*) | Sesi Flask sebelumnya belum ditutup sempurna | Jalankan `fuser -k 5000/tcp` atau matikan proses lama: `pkill -f run_web_dashboard.py` |
-
----
-
-## ⚖️ 10. Lisensi & Legalitas Proyek
+## ⚖️ 9. Lisensi & Legalitas Proyek
 
 Proyek ini didistribusikan di bawah lisensi **MIT License**. Seluruh kode sumber terbuka ini dikembangkan untuk kepentingan riset akademis, inovasi sistem benam (*embedded system*), serta pengembangan robot humanoid pada Kontes Robot Seni Tari Indonesia (KRSTI).
 
