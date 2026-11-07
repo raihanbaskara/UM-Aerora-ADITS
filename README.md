@@ -3,11 +3,6 @@
 # 🎭 AERORA ADITS — Audio-Driven IoT Task Scheduler
 ### *Adaptive Preemptive Priority Scheduler & Real-Time Edge Voice AI untuk Robot Seni Tari Indonesia (KRSTI)*
 
-**Tim Peneliti Dewantara — Departemen Teknik Elektro dan Informatika, Fakultas Teknik**  
-**Universitas Negeri Malang (UM)**
-
----
-
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Hardware Target](https://img.shields.io/badge/Hardware-Raspberry%20Pi%204%20%2F%205%20(ARM64)-C51A4A?logo=raspberry-pi&logoColor=white)](https://www.raspberrypi.com/)
 [![Voice AI Engine](https://img.shields.io/badge/Voice%20AI-LightGBM%20(97.33%25%20Acc)-brightgreen?logo=scikit-learn&logoColor=white)](https://lightgbm.readthedocs.io/)
@@ -16,6 +11,24 @@
 [![Statistical Test](https://img.shields.io/badge/Paired%20t--Test-t%3D20.34%20%7C%20p%3C0.001-blueviolet)](https://github.com/raihanbaskara/UM-Aerora-ADITS)
 
 </div>
+
+---
+
+## 📑 Daftar Isi
+- [1. Latar Belakang & Urgensi Rekayasa](#-1-latar-belakang--urgensi-rekayasa)
+- [2. Arsitektur Hierarki Prioritas ADITS](#-2-arsitektur-hierarki-prioritas-adits)
+- [3. Hasil Pembuktian Statistik (Uji-t Sampel Berpasangan)](#-3-hasil-pembuktian-statistik-uji-t-sampel-berpasangan)
+- [4. Kinerja Voice AI (LightGBM 5-Kelas)](#-4-kinerja-voice-ai-lightgbm-5-kelas)
+- [5. Galeri Dokumentasi Pengujian di Raspberry Pi 4](#-5-galeri-dokumentasi-pengujian-di-raspberry-pi-4)
+- [6. Struktur Direktori Repositori (Domain-Driven Organization)](#-6-struktur-direktori-repositori-domain-driven-organization)
+- [7. Panduan Cepat Menjalankan Sistem di Raspberry Pi](#-7-panduan-cepat-menjalankan-sistem-di-raspberry-pi)
+  - [7.1 Hubungkan Perangkat Keras](#1-hubungkan-perangkat-keras)
+  - [7.2 Kloning & Instalasi Otomatis 1-Klik Universal](#2-kloning--instalasi-otomatis-1-klik-universal)
+  - [7.3 Uji Diagnostik Hardware](#3-uji-diagnostik-hardware)
+  - [7.4 Ragam Mode Operasi Sistem](#4-ragam-mode-operasi-sistem)
+- [8. Spesifikasi REST API & WebSocket Telemetri](#-8-spesifikasi-rest-api--websocket-telemetri)
+- [9. Panduan Pemecahan Masalah (Troubleshooting & FAQ)](#-9-panduan-pemecahan-masalah-troubleshooting--faq)
+- [10. Lisensi & Legalitas Proyek](#-10-lisensi--legalitas-proyek)
 
 ---
 
@@ -200,44 +213,99 @@ UM-Aerora-ADITS/
 ## 🚀 7. Panduan Cepat Menjalankan Sistem di Raspberry Pi
 
 ### 1. Hubungkan Perangkat Keras
-* **Raspberry Pi:** Port USB-C terhubung ke Adaptor Resmi 5V.
+* **Raspberry Pi:** Port USB-C terhubung ke Adaptor Resmi 5V (minimal 3A untuk Pi 4, 5A untuk Pi 5).
 * **ROBOTIS U2D2:** Tancapkan ke Port USB 3.0 (Biru) Raspberry Pi.
 * **USB Mic / Receiver AB13X:** Tancapkan ke Port USB 2.0 (Hitam) Raspberry Pi.
-* **PCB Ungu AERORA:** Hubungkan Adaptor 12V (2A - 5A) ke DC Jack PCB, geser saklar ke posisi **ON** (LED menyala) untuk menyuplai daya **7.4V** ke motor servo Dynamixel XL-320.
+* **PCB Ungu AERORA:** Hubungkan Adaptor 12V (2A - 5A) ke DC Jack PCB, geser saklar ke posisi **ON** (LED menyala) untuk menyuplai daya **7.4V** ke bus motor servo Dynamixel XL-320.
 
-### 2. Instalasi Dependensi Otomatis (1-Klik Universal)
+### 2. Kloning & Instalasi Otomatis 1-Klik Universal
 Buka terminal di Raspberry Pi:
 ```bash
-cd ~/UM-Aerora-ADITS
+git clone https://github.com/raihanbaskara/UM-Aerora-ADITS.git
+cd UM-Aerora-ADITS
 chmod +x setup_raspy.sh
 ./setup_raspy.sh
 ```
-*Skrip ini otomatis mendeteksi model board (Pi 4 atau Pi 5), menginstal PortAudio, ALSA, Dynamixel SDK, membuat `venv`, dan menyetel FTDI Latency Timer U2D2 ke 1 ms.*
+*Skrip ini otomatis mendeteksi model board (Raspberry Pi 4 atau Pi 5), menginstal PortAudio, ALSA, Dynamixel SDK, membuat Python Virtual Environment (`venv`), dan menyetel rule udev FTDI Latency Timer U2D2 ke 1 ms secara permanen.*
 
 ### 3. Uji Diagnostik Hardware
+Sebelum menjalankan robot di arena, verifikasi seluruh subsistem:
 ```bash
 source venv/bin/activate
 python test_hardware.py
 ```
+*Diagnostik memeriksa beban CPU, suhu SoC ARM, level RMS mikrofon USB, koneksi port serial U2D2 (`/dev/ttyUSB0`), dan latensi inferensi LightGBM (~1.2 ms).*
 
-### 4. Jalankan Web Dashboard & Voice AI Hub
+### 4. Ragam Mode Operasi Sistem
+
+ADITS menyediakan 4 mode operasi independen yang dapat disesuaikan dengan kebutuhan:
+
+#### A. Mode 1: Web Telemetry Dashboard (Rekomendasi Kontes & Demo)
+Menjalankan backend Flask & WebSocket dengan GUI monitoring real-time berbasis browser:
 ```bash
 chmod +x run_raspy.sh
 ./run_raspy.sh
 ```
-Buka browser di laptop atau HP (yang terhubung dalam satu jaringan WiFi dengan Raspberry Pi), lalu akses:
+*Buka browser di laptop atau smartphone yang terhubung dalam satu jaringan WiFi dengan Raspberry Pi, lalu buka URL:*
 ```
 http://<IP_RASPBERRY_PI>:5000
 ```
 *(Contoh: `http://192.168.1.15:5000`)*
 
+#### B. Mode 2: Headless Terminal Grand Unified (Standar Pertandingan Tanpa Layar)
+Menjalankan kontroler penuh secara mandiri langsung di terminal tanpa beban rendering web:
+```bash
+source venv/bin/activate
+python adits_unified_voice_dsp_internal.py
+```
+
+#### C. Mode 3: Validasi Uji-t Berpasangan 30 Trial (Eksperimen Ilmiah)
+Menjalankan pengujian komparasi otomatis 30 trial berpasangan antara Mode Adaptif vs Mode Statis:
+```bash
+source venv/bin/activate
+python benchmarks/benchmark_scheduler_ttest.py
+```
+*Hasil pengujian otomatis dianalisis dengan `scipy.stats.ttest_rel`, disimpan ke `benchmarks/hasil_uji_t_scheduler.xlsx`, dan grafik boxplot diperbarui di `assets/scheduler_ttest_comparison.png`.*
+
+#### D. Mode 4: Pemindai Port & ID Servo Dynamixel XL-320
+Memindai baudrate dan ID servo yang terhubung pada bus serial half-duplex U2D2:
+```bash
+source venv/bin/activate
+python test_dynamixel_xl320_scan.py
+```
+
 ---
 
-## 👥 Tim Peneliti & Pengembang
+## 🌐 8. Spesifikasi REST API & WebSocket Telemetri
 
-* **Peneliti Utama / Software Engineer:** Raihan Baskara ([@raihanbaskara](https://github.com/raihanbaskara))
-* **Tim Riset:** Tim Robot Seni Tari Dewantara — KRSTI Universitas Negeri Malang
-* **Afiliasi:** Departemen Teknik Elektro dan Informatika, Fakultas Teknik, Universitas Negeri Malang (UM)
+Server Web Dashboard menyediakan antarmuka REST API dan WebSocket untuk integrasi IoT:
+
+| Metode | Endpoint | Deskripsi Fungsi | Contoh Payload / Respons |
+|---|---|---|---|
+| `GET` | `/` | Antarmuka pengguna Web Dashboard (Glassmorphism Luxury UI) | HTML Page |
+| `GET` | `/api/audio/devices` | Mengambil daftar perangkat mikrofon input yang terdeteksi ALSA | `[{"index": 1, "name": "AB13X USB Audio"}]` |
+| `POST` | `/api/voice/trigger` | Injeksi perintah suara virtual untuk pengujian tanpa mic fisik | `{"command": "STOP"}` |
+| `GET` | `/api/motion/actions` | Menampilkan seluruh sekuens koreografi tari yang tersedia | `["Pembuka_BaruAF", "GerakTari1", ...]` |
+| `POST` | `/api/motion/play` | Menjalankan koreografi tari tertentu ke aktuator | `{"action": "Pembuka_BaruAF"}` |
+| `GET` | `/api/experiment/export_csv` | Mengunduh riwayat data latensi respons interupsi | File `experiment_results.csv` |
+| `WS` | `/ws/telemetry` | Streaming data telemetri real-time 10 Hz (CPU, Suhu, Status Preemption, Posisi Servo) | JSON Telemetry Stream |
 
 ---
-*© 2026 Tim Peneliti Dewantara Robotika UM. Didistribusikan untuk kepentingan riset akademis dan kompetisi robotika nasional.*
+
+## 🛠️ 9. Panduan Pemecahan Masalah (Troubleshooting & FAQ)
+
+| Gejala Masalah | Akar Masalah | Solusi Cepat |
+|---|---|---|
+| `[Errno 13] Permission denied: '/dev/ttyUSB0'` | Pengguna Linux belum masuk ke grup `dialout` | Jalankan: `sudo usermod -a -G dialout $USER && newgrp dialout` |
+| Pergerakan servo patah-patah (*Jitter* > 15 ms) | *FTDI Latency Timer* kernel Linux masih default di 16 ms | Cek via `cat /sys/bus/usb-serial/devices/ttyUSB0/latency_timer`. Jalankan `echo 1 \| sudo tee /sys/bus/usb-serial/devices/ttyUSB0/latency_timer` atau jalankan ulang `./setup_raspy.sh` |
+| Mikrofon Nirkabel AB13X tidak terdeteksi | Port USB belum terdaftar di ALSA | Cabut dan colokkan kembali receiver USB mic. Cek daftar perangkat via `arecord -l`, lalu jalankan `python test_hardware.py` |
+| Muncul pesan `ALSA lib pcm.c:... underrun occurred` | Latensi audio buffer ALSA standar Linux non-RTOS | Peringatan ini wajar dan tidak mempengaruhi akurasi LightGBM berkat buffer isolasi *Speech-Island* 2048 sampel |
+| Port 5000 sudah terpakai (*Address already in use*) | Sesi Flask sebelumnya belum ditutup sempurna | Jalankan `fuser -k 5000/tcp` atau matikan proses lama: `pkill -f run_web_dashboard.py` |
+
+---
+
+## ⚖️ 10. Lisensi & Legalitas Proyek
+
+Proyek ini didistribusikan di bawah lisensi **MIT License**. Seluruh kode sumber terbuka ini dikembangkan untuk kepentingan riset akademis, inovasi sistem benam (*embedded system*), serta pengembangan robot humanoid pada Kontes Robot Seni Tari Indonesia (KRSTI).
+
+Copyright (c) 2026 AERORA ADITS Architecture. Open-source under the MIT License.
