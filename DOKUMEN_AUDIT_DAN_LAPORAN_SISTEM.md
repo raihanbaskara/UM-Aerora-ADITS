@@ -74,28 +74,28 @@ Pengujian ilmiah dengan pembagian data **70% Training (350 sampel) : 30% Testing
 
 | Parameter Arsitektur | Baseline LightGBM | Pembanding Random Forest | Tuned LightGBM (Model Aktif) |
 | :--- | :---: | :---: | :---: |
-| **Akurasi Data Uji (30%)** | 93.33 % | 95.33 % | **97.33 % (TERTINGGI)** |
+| **Akurasi Data Uji (30%)** | 93.33 % | 95.33 % | **96.00 % (TERTINGGI)** |
 | **Karakteristik Probabilitas** | Cenderung Tajam | Mengambang (35%–58%) | **Sangat Tegas (88%–99%)** |
 | **Struktur Pohon** | 20 Daun | 300 Pohon Bagging | **12 Daun (Anti-Overfitting Pruned)** |
 | **Feature Subsampling** | 0.80 | $\sqrt{p}$ | **0.50 (50% Fitur Acak per Iterasi)** |
 | **Row Subsampling** | 1.00 | Bootstrap | **0.85 (85% Baris Acak per Iterasi)** |
-| **Overfitting Gap (Latih vs Uji)** | 6.67 % | 4.67 % | **2.67 % (Paling Ketat & Stabil)** |
+| **Overfitting Gap (Latih vs Uji)** | 6.67 % | 4.67 % | **4.00 % (Paling Ketat & Stabil)** |
 
 > **Analisis Ilmiah:**  
-> Melalui pembaruan rekaman retake pada perintah kritis (`BERDIRI` dan `LANJUT`) serta konfigurasi **Leaf Pruning (`num_leaves=12`)** dan **Feature Subsampling (`colsample_bytree=0.5`)**, generalisasi model pada 150 sampel uji baru mencapai **97.33%**. Perintah `LANJUT` dan `MULAI` mencapai recall sempurna 100%, dan gap antara akurasi latih dan uji menyusut menjadi hanya **2.67%**, membuktikan model bebas dari *overfitting*.
+> Melalui pembaruan rekaman retake pada perintah kritis (`BERDIRI` dan `LANJUT`) serta konfigurasi **Leaf Pruning (`num_leaves=12`)** dan **Feature Subsampling (`colsample_bytree=0.5`)**, generalisasi model pada 150 sampel uji baru mencapai **96.00%**. Perintah `MULAI` dan `STOP` mencapai recall sempurna 100%, dan gap antara akurasi latih dan uji menyusut menjadi hanya **4.00%**, membuktikan model bebas dari *overfitting*.
 
 ### 3.3. Classification Report Voice AI (Data Uji 150 Sampel Realistis)
 ```
               precision    recall  f1-score   support
      BERDIRI     1.0000    0.9000    0.9474        30
-       DUDUK     1.0000    0.9667    0.9831        30
-      LANJUT     0.9375    1.0000    0.9677        30
-       MULAI     1.0000    1.0000    1.0000        30
+       DUDUK     0.9667    0.9667    0.9667        30
+      LANJUT     0.9333    0.9333    0.9333        30
+       MULAI     0.9677    1.0000    0.9836        30
         STOP     0.9375    1.0000    0.9677        30
 
-    accuracy                         0.9733       150
-   macro avg     0.9750    0.9733    0.9732       150
-weighted avg     0.9750    0.9733    0.9732       150
+    accuracy                         0.9600       150
+   macro avg     0.9610    0.9600    0.9597       150
+weighted avg     0.9610    0.9600    0.9597       150
 ```
 
 ---

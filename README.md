@@ -5,7 +5,7 @@
 
 [![Python Version](https://img.shields.io/badge/Python-3.11%20%7C%203.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Hardware Target](https://img.shields.io/badge/Hardware-Raspberry%20Pi%204%20%2F%205%20(ARM64)-C51A4A?logo=raspberry-pi&logoColor=white)](https://www.raspberrypi.com/)
-[![Voice AI Engine](https://img.shields.io/badge/Voice%20AI-LightGBM%20(97.33%25%20Acc)-brightgreen?logo=scikit-learn&logoColor=white)](https://lightgbm.readthedocs.io/)
+[![Voice AI Engine](https://img.shields.io/badge/Voice%20AI-LightGBM%20(96.00%25%20Acc)-brightgreen?logo=scikit-learn&logoColor=white)](https://lightgbm.readthedocs.io/)
 [![Real-Time Scheduler](https://img.shields.io/badge/Dispatch%20Latency-5.28%20ms%20(Hard%20Real--Time)-blue)](https://github.com/raihanbaskara/UM-Aerora-ADITS)
 [![Actuator Bus](https://img.shields.io/badge/Actuator-ROBOTIS%20Dynamixel%20XL--320%20(1Mbps)-red)](https://emanual.robotis.com/)
 [![Statistical Test](https://img.shields.io/badge/Paired%20t--Test-t%3D20.34%20%7C%20p%3C0.001-blueviolet)](https://github.com/raihanbaskara/UM-Aerora-ADITS)
@@ -62,7 +62,7 @@ Sistem mengklasifikasikan seluruh tugas komputasi robotik ke dalam 4 tingkatan p
 [ Speech-Island Isolation & DSP (47 Fitur Akustik) ]
              |
              v
-[ Edge AI Classifier: LightGBM (Akurasi 97.33%) ]
+[ Edge AI Classifier: LightGBM (Akurasi 96.00%) ]
              |
              v
 +-----------------------------------------------------------------------+
@@ -112,7 +112,7 @@ Pengujian komparasi performa latensi respons tugas darurat (`STOP`) dilakukan se
 
 Model klasifikasi vokal dilatih menggunakan dataset 5-kelas realistis dengan augmentasi *ambient noise* ruangan dan ekstraksi 47 fitur akustik riil (MFCC, Spectral Centroid, Rolloff, ZCR, Bandwidth, Chroma STFT, Tempo).
 
-* **Akurasi Model:** **97.33%**
+* **Akurasi Model:** **96.00%** (Presisi: 96.10%, Recall: 96.00%, F1-Score: 95.97%)
 * **Inference Latency di Raspberry Pi:** **~1.3 s.d. 3.2 ms**
 * **Fitur Utama:** *Speech-Island Isolation* untuk mengeliminasi desis mikrofon di awal/akhir sampel sehingga tidak bias mengklasifikasikan hening sebagai perintah `STOP`.
 
@@ -150,7 +150,7 @@ Sistem telah melalui tahapan verifikasi hardware riil secara end-to-end pada **R
 UM-Aerora-ADITS/
 ├── assets/                                    # Aset visual & galeri dokumentasi
 │   ├── scheduler_ttest_comparison.png         # Grafik boxplot komparasi uji-t
-│   ├── confusion_matrix_command_5kelas.png    # Matriks konfusi Voice AI (97.33%)
+│   ├── confusion_matrix_command_5kelas.png    # Matriks konfusi Voice AI (96.00%)
 │   └── screenshots/                           # 8 tangkapan layar pengujian riil Pi 4
 │
 ├── benchmarks/                                # Validasi ilmiah & eksperimen performa
@@ -167,7 +167,7 @@ UM-Aerora-ADITS/
 │   └── dataset_audio_krsti_final_866samples_with_3volume_transmitter.xlsx
 │
 ├── models/                                    # Model Machine Learning produksi
-│   ├── model_command_classifier_5kelas.pkl    # Model Voice AI (97.33% akurasi)
+│   ├── model_command_classifier_5kelas.pkl    # Model Voice AI (96.00% akurasi)
 │   └── model_robot_tari_lightgbm_95percent.pkl# Model Dance AI (95% akurasi)
 │
 ├── notebooks/                                 # Jupyter Notebook pelatihan & riset

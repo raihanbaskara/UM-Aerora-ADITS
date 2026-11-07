@@ -6,7 +6,7 @@ AERORA ADITS -- Robot Seni Tari Indonesia (KRSTI)
 Mendeteksi mikrofon input sistem, membaca stream live audio dengan channel &
 sample rate asli perangkat, mengisolasi Speech Island (menghilangkan ambient noise
 agar fitur ZCR & Spectral Centroid tidak bias ke STOP), mengekstrak 47 fitur riil,
-dan mengklasifikasikan via LightGBM 5-Kelas dengan akurasi 97.33%.
+dan mengklasifikasikan via LightGBM 5-Kelas dengan akurasi 96.00%.
 ================================================================================
 """
 

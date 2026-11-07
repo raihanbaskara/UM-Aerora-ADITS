@@ -27,7 +27,7 @@ STRUKTUR FOLDER MODULAR (DOMAIN-DRIVEN ORGANIZATION):
 - requirements.txt                : Dependensi pustaka Python
 
 [2. FOLDER MODELS (MODEL MACHINE LEARNING .PKL)]
-- models/model_command_classifier_5kelas.pkl     : Model Voice AI (Akurasi 97.33%)
+- models/model_command_classifier_5kelas.pkl     : Model Voice AI (Akurasi 96.00%)
 - models/model_robot_tari_lightgbm_95percent.pkl : Model Dance AI (Akurasi 95%)
 
 [3. FOLDER DATA (AUDIO MASTER & DATASET EXCEL)]
