@@ -642,19 +642,23 @@
             display: inline-block;
         }
 
-        /* LIVE LINUX TERMINAL CONSOLE */
+        /* LIVE LINUX TERMINAL CONSOLE (LIGHT EDITORIAL EDITION) */
         .terminal-console-box {
             margin-top: 18px;
-            background: #090d16;
-            border: 1px solid #1e293b;
+            background: #ffffff;
+            border: 1px solid var(--border-core);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+            transition: all 0.2s ease;
+        }
+        .terminal-console-box:hover {
+            box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.09);
         }
         .terminal-topbar {
-            background: #0f172a;
+            background: #f8fafc;
             padding: 10px 14px;
-            border-bottom: 1px solid #1e293b;
+            border-bottom: 1px solid var(--border-core);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -669,43 +673,65 @@
             height: 10px;
             border-radius: 50%;
             display: inline-block;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
-        .dot-red { background: #ef4444; }
-        .dot-yellow { background: #f59e0b; }
-        .dot-green { background: #10b981; }
+        .dot-red { background: #f87171; border: 1px solid #ef4444; }
+        .dot-yellow { background: #fbbf24; border: 1px solid #f59e0b; }
+        .dot-green { background: #34d399; border: 1px solid #10b981; }
         .term-title {
             font-family: var(--font-mono);
             font-size: 0.72rem;
-            color: #94a3b8;
+            color: #475569;
             margin-left: 8px;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: -0.01em;
         }
         .term-btn {
-            background: rgba(255, 255, 255, 0.08);
-            color: #cbd5e1;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: #ffffff;
+            color: #334155;
+            border: 1px solid #cbd5e1;
             font-family: var(--font-mono);
             font-size: 0.7rem;
             font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            transition: all 0.15s ease;
         }
         .term-btn:hover {
-            background: rgba(255, 255, 255, 0.16);
-            color: white;
+            background: #f1f5f9;
+            color: #0f172a;
+            border-color: #94a3b8;
+        }
+        .term-btn:active {
+            transform: scale(0.97);
         }
         .terminal-body {
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
             font-size: 0.78rem;
-            line-height: 1.5;
-            padding: 14px;
+            line-height: 1.55;
+            padding: 14px 16px;
             max-height: 260px;
             overflow-y: auto;
-            color: #cbd5e1;
+            background: #fbfcfd;
+            color: #1e293b;
             white-space: pre-wrap;
             word-break: break-all;
+            border-top: none;
+        }
+        .terminal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+        .terminal-body::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .terminal-body::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
 
         /* SECTION 4: DATASET ACQUISITION TABLE (SKRIPSI / PKM-KC) */
