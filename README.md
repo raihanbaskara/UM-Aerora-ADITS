@@ -281,12 +281,13 @@ Server Web Dashboard menyediakan antarmuka REST API dan WebSocket untuk integras
 | Metode | Endpoint | Deskripsi Fungsi | Contoh Payload / Respons |
 |---|---|---|---|
 | `GET` | `/` | Antarmuka pengguna Web Dashboard (Glassmorphism Luxury UI) | HTML Page |
+| `GET` | `/api/status` | Mengambil status lengkap telemetri, servo 1-15, dan status scheduler | JSON Telemetry Snapshot |
 | `GET` | `/api/audio/devices` | Mengambil daftar perangkat mikrofon input yang terdeteksi ALSA | `[{"index": 1, "name": "AB13X USB Audio"}]` |
 | `POST` | `/api/voice/trigger` | Injeksi perintah suara virtual untuk pengujian tanpa mic fisik | `{"command": "STOP"}` |
-| `GET` | `/api/motion/actions` | Menampilkan seluruh sekuens koreografi tari yang tersedia | `["Pembuka_BaruAF", "GerakTari1", ...]` |
-| `POST` | `/api/motion/play` | Menjalankan koreografi tari tertentu ke aktuator | `{"action": "Pembuka_BaruAF"}` |
+| `GET` | `/api/motions` | Menampilkan seluruh sekuens koreografi tari yang tersedia | `{"files": ["Pembuka_BaruAF.csv", ...]}` |
+| `POST` | `/api/motion/play` | Menjalankan koreografi tari tertentu ke aktuator | `{"filename": "Pembuka_BaruAF.csv"}` |
 | `GET` | `/api/experiment/export_csv` | Mengunduh riwayat data latensi respons interupsi | File `experiment_results.csv` |
-| `WS` | `/ws/telemetry` | Streaming data telemetri real-time 10 Hz (CPU, Suhu, Status Preemption, Posisi Servo) | JSON Telemetry Stream |
+| `WS` | `/ws` | Streaming data telemetri real-time 10 Hz (CPU, Suhu, Status Preemption, Posisi Servo) | JSON Telemetry Stream |
 
 ---
 
