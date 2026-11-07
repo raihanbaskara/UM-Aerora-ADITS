@@ -11,42 +11,44 @@ engine penjadwalan tugas adaptif dengan preemption kooperatif
 serta model siap pakai untuk robot tari humanoid KRSTI.
 
 --------------------------------------------------------------------------------
-DAFTAR FILE DI DALAM PAKET:
+STRUKTUR FOLDER MODULAR (DOMAIN-DRIVEN ORGANIZATION):
 --------------------------------------------------------------------------------
-[1. KONTROLER UTAMA & PENJADWAL ADAPTIF]
+[1. DIREKTORI ROOT (EKSEKUSI & ANCHOR)]
 - run_web_dashboard.py            : Entry-point Web Telemetry Dashboard (Port 5000)
-- web/                            : Aplikasi Web Telemetry Dashboard (Flask + WebSocket)
-- adits_unified_voice_dsp_internal.py : Kontroler Utama Berbasis Terminal (Voice AI + DSP)
-- adits_adaptive_scheduler.py     : Engine Penjadwal Prioritas (P0 s/d P3) min-heap
-- posture_lookup_decoder.py       : Decoder pemetaan 15 sudut servo fisik robot tari
-- gerakan_baru/                   : 16 file CSV sekuens koreografi gerak tari robot
-
-[2. VALIDASI STATISTIKA AKADEMIS & BENCHMARK]
-- benchmark_scheduler_ttest.py    : Skrip Uji-t Berpasangan (N=30) Adaptif vs Statis
-- hasil_uji_t_scheduler.xlsx      : Rekap data & kalkulasi uji-t (t=20.34, p=1.04e-18)
-- scheduler_ttest_comparison.png  : Grafik visualisasi komparasi waktu respons (Boxplot)
-- eval_buffer_duration_sensitivity.py  : Skrip uji sensitivitas panjang buffer audio
-- hasil_sensitivitas_buffer_audio.xlsx : Data hasil akurasi per durasi buffer
-
-[3. DEPLOYMENT EMBEDDED RASPBERRY PI (UNIVERSAL PI 4 & PI 5)]
-- setup_raspy.sh                  : Skrip bash instalasi otomatis 1-klik (Universal)
-- test_hardware.py                : Skrip diagnostik CPU, suhu, ALSA mic, U2D2, dan latensi
-- test_dynamixel_xl320_scan.py    : Skrip scanner & uji kedip LED servo Dynamixel XL-320
+- setup_raspy.sh                  : Skrip instalasi otomatis 1-klik universal
 - run_raspy.sh                    : Skrip shortcut menjalankan sistem di Raspberry Pi
-- PANDUAN_RASPBERRY_PI.md         : Panduan langkah lengkap eksekusi di Raspberry Pi
-- requirements.txt                : Daftar pustaka dependensi Python
-
-[4. MODEL KECERDASAN BUATAN (.PKL)]
-- model_command_classifier_5kelas.pkl     : Model Voice AI Tuned LightGBM (Akurasi 97.33%)
-- model_robot_tari_lightgbm_95percent.pkl : Model Dance AI LightGBM (Akurasi 94.62% ~ 95%)
-- confusion_matrix_command_5kelas.png     : Matriks konfusi model Voice AI 97.33%
-
-[5. DOKUMENTASI & DATASET]
+- test_hardware.py                : Diagnostik hardware universal (CPU, Suhu, Mic, U2D2, AI)
+- test_dynamixel_xl320_scan.py    : Pemindai ID & uji servo Dynamixel XL-320
+- adits_adaptive_scheduler.py     : Engine Preemptive Priority Scheduler (P0 - P3)
+- adits_unified_voice_dsp_internal.py : Kontroler terminal Grand Unified
+- posture_lookup_decoder.py       : Decoder pose ke ID servo 1-15
+- PANDUAN_RASPBERRY_PI.md         : Panduan teknis pengkabelan hardware
 - README.md                       : Dokumentasi utama repositori
-- DOKUMEN_AUDIT_DAN_LAPORAN_SISTEM.md : Matriks kepatuhan proposal riset PKM-KC
-- DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/ : Galeri 8 screenshot pengujian nyata di Pi 4
-- dataset_perintah_suara_5kelas_realistis.xlsx : Dataset pelatihan perintah suara
-- dataset_robot_tari_3detik_lengkap_detail_pose.xlsx : Dataset pemetaan pose tari
-- audio_krsti_full_tari.wav       : Rekaman audio musik tari KRSTI resmi (21.1 MB)
-- notebooks/                      : Arsip Jupyter Notebook pelatihan & benchmark
+- requirements.txt                : Dependensi pustaka Python
+
+[2. FOLDER MODELS (MODEL MACHINE LEARNING .PKL)]
+- models/model_command_classifier_5kelas.pkl     : Model Voice AI (Akurasi 97.33%)
+- models/model_robot_tari_lightgbm_95percent.pkl : Model Dance AI (Akurasi 95%)
+
+[3. FOLDER DATA (AUDIO MASTER & DATASET EXCEL)]
+- data/audio_krsti_full_tari.wav                 : Rekaman audio tari resmi (21.1 MB)
+- data/dataset_perintah_suara_5kelas_realistis.xlsx : Dataset vokal realistis
+- data/dataset_robot_tari_3detik_lengkap_detail_pose.xlsx : Dataset pose tari
+
+[4. FOLDER BENCHMARKS (VALIDASI STATISTIK UJI-T)]
+- benchmarks/benchmark_scheduler_ttest.py        : Skrip uji-t berpasangan (N=30)
+- benchmarks/hasil_uji_t_scheduler.xlsx          : Data mentah 30 trial & statistik uji-t
+- benchmarks/eval_buffer_duration_sensitivity.py : Skrip uji buffer vokal
+- benchmarks/hasil_sensitivitas_buffer_audio.xlsx: Hasil sensitivitas buffer
+
+[5. FOLDER ASSETS (GRAFIK & DOKUMENTASI)]
+- assets/scheduler_ttest_comparison.png          : Boxplot komparasi uji-t
+- assets/confusion_matrix_command_5kelas.png     : Matriks konfusi Voice AI
+- assets/screenshots/                            : 8 tangkapan layar pengujian di Pi 4
+
+[6. FOLDER GERAKAN_BARU (KOREOGRAFI TARI)]
+- gerakan_baru/                                  : 16 file CSV trajektori pose tari
+
+[7. FOLDER WEB (FULL-STACK DASHBOARD)]
+- web/                                           : Backend Flask, WebSocket, dan HTML UI
 ================================================================================

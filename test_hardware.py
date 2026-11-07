@@ -39,7 +39,10 @@ except ImportError:
     joblib = None
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "model_command_classifier_5kelas.pkl")
+# Dukungan multi-path: cek di folder models/ terlebih dahulu, lalu fallback ke root
+MODEL_PATH = os.path.join(BASE_DIR, "models", "model_command_classifier_5kelas.pkl")
+if not os.path.exists(MODEL_PATH):
+    MODEL_PATH = os.path.join(BASE_DIR, "model_command_classifier_5kelas.pkl")
 
 def detect_board_model():
     """Mendeteksi apakah sistem berjalan di Raspberry Pi 4, Pi 5, atau PC."""

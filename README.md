@@ -90,7 +90,7 @@ Pengujian komparasi performa latensi respons tugas darurat (`STOP`) dilakukan se
 | **Ukuran Efek (Cohen's $d$)** | **$d = 3.714$** | *Huge Effect Size* | Superioritas intrinsik sistem |
 
 <div align="center">
-  <img src="scheduler_ttest_comparison.png" alt="Boxplot Uji-t Latensi Scheduler" width="650"/>
+  <img src="assets/scheduler_ttest_comparison.png" alt="Boxplot Uji-t Latensi Scheduler" width="650"/>
   <p><em>Gambar 1. Diagram Boxplot Distribusi Latensi Respons: Mode Adaptif Preemptive (5.28 ms) vs Mode Statis FIFO (1229.95 ms).</em></p>
 </div>
 
@@ -105,7 +105,7 @@ Model klasifikasi vokal dilatih menggunakan dataset 5-kelas realistis dengan aug
 * **Fitur Utama:** *Speech-Island Isolation* untuk mengeliminasi desis mikrofon di awal/akhir sampel sehingga tidak bias mengklasifikasikan hening sebagai perintah `STOP`.
 
 <div align="center">
-  <img src="confusion_matrix_command_5kelas.png" alt="Matriks Konfusi LightGBM Voice AI" width="550"/>
+  <img src="assets/confusion_matrix_command_5kelas.png" alt="Matriks Konfusi LightGBM Voice AI" width="550"/>
   <p><em>Gambar 2. Matriks Konfusi Klasifikasi Perintah Suara 5-Kelas (STOP, MULAI, LANJUT, BERDIRI, DUDUK).</em></p>
 </div>
 
@@ -118,56 +118,58 @@ Sistem telah melalui tahapan verifikasi hardware riil secara end-to-end pada **R
 <div align="center">
   <table>
     <tr>
-      <td align="center"><img src="DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/00_eksekusi_setup_rpi4_otomatis.png" width="380"/><br/><b>1. Instalasi Otomatis (setup_raspy.sh)</b></td>
-      <td align="center"><img src="DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/02_verifikasi_modul_core.png" width="380"/><br/><b>2. Verifikasi Core Engine & AI</b></td>
+      <td align="center"><img src="assets/screenshots/00_eksekusi_setup_rpi4_otomatis.png" width="380"/><br/><b>1. Instalasi Otomatis (setup_raspy.sh)</b></td>
+      <td align="center"><img src="assets/screenshots/02_verifikasi_modul_core.png" width="380"/><br/><b>2. Verifikasi Core Engine & AI</b></td>
     </tr>
     <tr>
-      <td align="center"><img src="DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/03_diagnostik_hardware_rpi4.png" width="380"/><br/><b>3. Diagnostik PortAudio & U2D2</b></td>
-      <td align="center"><img src="DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/04_benchmark_uji_t_scheduler.png" width="380"/><br/><b>4. Eksekusi 30 Trial Uji-t di Terminal</b></td>
+      <td align="center"><img src="assets/screenshots/03_diagnostik_hardware_rpi4.png" width="380"/><br/><b>3. Diagnostik PortAudio & U2D2</b></td>
+      <td align="center"><img src="assets/screenshots/04_benchmark_uji_t_scheduler.png" width="380"/><br/><b>4. Eksekusi 30 Trial Uji-t di Terminal</b></td>
     </tr>
   </table>
-  <img src="DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/05_eksekusi_adits_grand_unified.png" width="780"/><br/>
+  <img src="assets/screenshots/05_eksekusi_adits_grand_unified.png" width="780"/><br/>
   <p><em>Gambar 3. Eksekusi Grand Unified Telemetry Hub & Real-Time Monitoring di Raspberry Pi.</em></p>
 </div>
 
 ---
 
-## 📁 6. Struktur Direktori Repositori (Clean & Curated)
+## 📁 6. Struktur Direktori Repositori (Domain-Driven Organization)
 
 ```
 UM-Aerora-ADITS/
-├── README.md                                  # Dokumentasi utama repositori
-├── .gitignore                                 # Filter ketat file sementara & cache
-├── PANDUAN_RASPBERRY_PI.md                    # Panduan teknis pengkabelan & instalasi hardware
-├── PANDUAN_JALANKAN.txt                       # Catatan operasional ringkas
-├── requirements.txt                           # Dependensi pustaka Python
-├── setup_raspy.sh                             # Skrip instalasi otomatis universal (Pi 4 & Pi 5)
-├── test_hardware.py                           # Skrip diagnostik CPU, Suhu, Mic RMS, U2D2, dan AI
-├── test_dynamixel_xl320_scan.py               # Pemindai baudrate & ID motor servo Dynamixel
-├── run_raspy.sh                               # Skrip shortcut menjalankan sistem di Raspberry Pi
-├── run_web_dashboard.py                       # Entry-point Web Telemetry Dashboard (Port 5000)
+├── assets/                                    # Aset visual & galeri dokumentasi
+│   ├── scheduler_ttest_comparison.png         # Grafik boxplot komparasi uji-t
+│   ├── confusion_matrix_command_5kelas.png    # Matriks konfusi Voice AI (97.33%)
+│   └── screenshots/                           # 8 tangkapan layar pengujian riil Pi 4
 │
-├── adits_adaptive_scheduler.py                # Engine Preemptive Priority Queueing ADITS
-├── benchmark_scheduler_ttest.py               # Skrip pengujian 30 trial berpasangan & uji-t
-├── posture_lookup_decoder.py                  # Decoder pose koreografi tari ke ID Servo 1-15
-├── adits_unified_voice_dsp_internal.py        # Kontroler terminal Grand Unified (Voice AI + DSP)
+├── benchmarks/                                # Validasi ilmiah & eksperimen performa
+│   ├── benchmark_scheduler_ttest.py           # Skrip pengujian 30 trial berpasangan
+│   ├── hasil_uji_t_scheduler.xlsx             # Data mentah & ringkasan statistik uji-t
+│   ├── eval_buffer_duration_sensitivity.py    # Skrip evaluasi sensitivitas buffer
+│   └── hasil_sensitivitas_buffer_audio.xlsx   # Data eksperimen buffer
 │
-├── model_command_classifier_5kelas.pkl        # Model terlatih LightGBM Voice AI (Akurasi 97.33%)
-├── model_robot_tari_lightgbm_95percent.pkl    # Model interpolasi trajektori gerak tari
-├── audio_krsti_full_tari.wav                  # Rekaman audio musik pengiring tari KRSTI (21.1 MB)
-├── dataset_perintah_suara_5kelas_realistis.xlsx # Dataset pelatihan vokal realistis
-├── dataset_robot_tari_3detik_lengkap_detail_pose.xlsx # Dataset pemetaan pose tari
-├── hasil_uji_t_scheduler.xlsx                 # Data mentah 30 trial & ringkasan statistik
-├── scheduler_ttest_comparison.png             # Visualisasi Boxplot perbandingan latensi
-├── confusion_matrix_command_5kelas.png        # Visualisasi Matriks Konfusi Voice AI
+├── data/                                      # Data audio & dataset pelatihan
+│   ├── audio_krsti_full_tari.wav              # Audio musik tari resmi (21.1 MB)
+│   ├── dataset_perintah_suara_5kelas_realistis.xlsx # Dataset pelatihan vokal
+│   ├── dataset_robot_tari_3detik_lengkap_detail_pose.xlsx # Dataset pose tari
+│   ├── dataset_perintah_suara_5kelas.xlsx
+│   └── dataset_audio_krsti_final_866samples_with_3volume_transmitter.xlsx
 │
-├── gerakan_baru/                              # File CSV sekuens koreografi gerak tari robot
+├── models/                                    # Model Machine Learning produksi
+│   ├── model_command_classifier_5kelas.pkl    # Model Voice AI (97.33% akurasi)
+│   └── model_robot_tari_lightgbm_95percent.pkl# Model Dance AI (95% akurasi)
+│
+├── notebooks/                                 # Jupyter Notebook pelatihan & riset
+│   ├── Training_Command_Classifier_5Kelas.ipynb
+│   ├── Training_Command_Classifier_5Kelas_Baseline_93Pct.ipynb
+│   ├── Training_LightGBM_Benchmark.ipynb
+│   └── Training_Random_Forest_Transmitter_91Percent.ipynb
+│
+├── gerakan_baru/                              # Sekuens koreografi tari (16 file CSV)
 │   ├── Pembuka_BaruAF.csv
-│   ├── PengawakAF.csv
-│   └── ... (16 file koreografi tari)
+│   └── ...
 │
-├── web/                                       # Aplikasi Web Telemetry Dashboard (Flask + WebSocket)
-│   ├── app.py                                 # Server backend Flask & REST API
+├── web/                                       # Full-stack Flask Web Telemetry Dashboard
+│   ├── app.py                                 # Server backend Flask & WebSocket
 │   ├── audio_service.py                       # Audio listener & Speech-Island Isolation
 │   ├── voice_ai_bridge.py                     # Jembatan inferensi AI ke task scheduler
 │   ├── motion_service.py                      # Eksekutor interpolasi gerak koreografi tari
@@ -177,13 +179,20 @@ UM-Aerora-ADITS/
 │   └── templates/
 │       └── index.html                         # Antarmuka Glassmorphism (Editorial Luxury UI)
 │
-├── notebooks/                                 # Jupyter Notebooks Pelatihan & Riset
-│   ├── Training_Command_Classifier_5Kelas.ipynb
-│   ├── Training_Command_Classifier_5Kelas_Baseline_93Pct.ipynb
-│   ├── Training_LightGBM_Benchmark.ipynb
-│   └── Training_Random_Forest_Transmitter_91Percent.ipynb
-│
-└── DOKUMENTASI_INSTALASI_DAN_PENGUJIAN/       # Galeri tangkapan layar pengujian riil di Pi 4
+├── .gitignore                                 # Filter Git untuk file cache & temporary
+├── DOKUMEN_AUDIT_DAN_LAPORAN_SISTEM.md        # Matriks kepatuhan proposal PKM-KC
+├── PANDUAN_JALANKAN.txt                       # Catatan operasional ringkas
+├── PANDUAN_RASPBERRY_PI.md                    # Panduan teknis hardware universal
+├── README.md                                  # Dokumentasi utama repositori
+├── requirements.txt                           # Dependensi pustaka Python
+├── run_raspy.sh                               # Skrip shortcut eksekusi Pi
+├── run_web_dashboard.py                       # Entry-point Web Telemetry Dashboard (Port 5000)
+├── setup_raspy.sh                             # Skrip instalasi 1-klik universal
+├── test_dynamixel_xl320_scan.py               # Pemindai baudrate & ID motor servo Dynamixel
+├── test_hardware.py                           # Diagnostik CPU, Suhu, Mic RMS, U2D2, dan AI
+├── adits_adaptive_scheduler.py                # Engine Preemptive Priority Scheduler
+├── adits_unified_voice_dsp_internal.py        # Kontroler terminal Grand Unified
+└── posture_lookup_decoder.py                  # Decoder pose ke ID servo 1-15
 ```
 
 ---
@@ -205,7 +214,13 @@ chmod +x setup_raspy.sh
 ```
 *Skrip ini otomatis mendeteksi model board (Pi 4 atau Pi 5), menginstal PortAudio, ALSA, Dynamixel SDK, membuat `venv`, dan menyetel FTDI Latency Timer U2D2 ke 1 ms.*
 
-### 3. Jalankan Web Dashboard & Voice AI Hub
+### 3. Uji Diagnostik Hardware
+```bash
+source venv/bin/activate
+python test_hardware.py
+```
+
+### 4. Jalankan Web Dashboard & Voice AI Hub
 ```bash
 chmod +x run_raspy.sh
 ./run_raspy.sh

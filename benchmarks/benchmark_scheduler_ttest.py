@@ -32,7 +32,13 @@ Output:
 
 import random
 import time
+import os
 import sys
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(BASE_DIR)
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 
 import numpy as np
 import pandas as pd
@@ -137,7 +143,7 @@ def main():
         "mode": "Paired t-test", "t_statistic": t_stat, "p_value": p_value, "alpha": ALPHA,
     }])
 
-    out_xlsx = "hasil_uji_t_scheduler.xlsx"
+    out_xlsx = os.path.join(BASE_DIR, "hasil_uji_t_scheduler.xlsx")
     with pd.ExcelWriter(out_xlsx) as writer:
         df.to_excel(writer, sheet_name="Data_Mentah_Per_Trial", index=False)
         summary_df.to_excel(writer, sheet_name="Ringkasan_Statistik", index=False)
@@ -161,7 +167,8 @@ def main():
                  f"t={t_stat:.2f}, p={p_value:.4g}")
     ax.grid(axis="y", alpha=0.3)
     plt.tight_layout()
-    out_png = "scheduler_ttest_comparison.png"
+    out_png = os.path.join(ROOT_DIR, "assets", "scheduler_ttest_comparison.png")
+    os.makedirs(os.path.dirname(out_png), exist_ok=True)
     plt.savefig(out_png, dpi=200)
     print(f"Boxplot tersimpan: {out_png}")
 

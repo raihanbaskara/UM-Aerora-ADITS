@@ -84,29 +84,38 @@ def find_file(candidates):
     return next((p for p in candidates if os.path.exists(p)), None)
 
 CMD_MODEL_PATH = find_file([
+    os.path.join(current_dir, "models", "model_command_classifier_5kelas.pkl"),
     os.path.join(current_dir, "model_command_classifier_5kelas.pkl"),
+    os.path.join(current_dir, "ADITS_ROBOT_TARI_SIAP_PAKAI", "models", "model_command_classifier_5kelas.pkl"),
     os.path.join(current_dir, "ADITS_ROBOT_TARI_SIAP_PAKAI", "model_command_classifier_5kelas.pkl"),
+    os.path.join(parent_dir, "models", "model_command_classifier_5kelas.pkl"),
     os.path.join(parent_dir, "model_command_classifier_5kelas.pkl"),
 ])
 
 DANCE_MODEL_PATH = find_file([
+    os.path.join(current_dir, "models", "model_robot_tari_lightgbm_95percent.pkl"),
     os.path.join(current_dir, "model_robot_tari_lightgbm_95percent.pkl"),
+    os.path.join(current_dir, "ADITS_ROBOT_TARI_SIAP_PAKAI", "models", "model_robot_tari_lightgbm_95percent.pkl"),
     os.path.join(current_dir, "ADITS_ROBOT_TARI_SIAP_PAKAI", "model_robot_tari_lightgbm_95percent.pkl"),
+    os.path.join(parent_dir, "models", "model_robot_tari_lightgbm_95percent.pkl"),
     os.path.join(parent_dir, "model_robot_tari_lightgbm_95percent.pkl"),
-    os.path.join(current_dir, "model_robot_tari_final_transmitter_91percent.pkl"),
-    os.path.join(current_dir, "ADITS_ROBOT_TARI_SIAP_PAKAI", "model_robot_tari_final_transmitter_91percent.pkl"),
-    os.path.join(parent_dir, "model_robot_tari_final_transmitter_91percent.pkl"),
 ])
 
 EXCEL_PATH = find_file([
+    os.path.join(current_dir, "data", "dataset_robot_tari_3detik_lengkap_detail_pose.xlsx"),
     os.path.join(current_dir, "dataset_robot_tari_3detik_lengkap_detail_pose.xlsx"),
+    os.path.join(current_dir, "ADITS_ROBOT_TARI_SIAP_PAKAI", "data", "dataset_robot_tari_3detik_lengkap_detail_pose.xlsx"),
     os.path.join(current_dir, "ADITS_ROBOT_TARI_SIAP_PAKAI", "dataset_robot_tari_3detik_lengkap_detail_pose.xlsx"),
+    os.path.join(parent_dir, "data", "dataset_robot_tari_3detik_lengkap_detail_pose.xlsx"),
     os.path.join(parent_dir, "dataset_robot_tari_3detik_lengkap_detail_pose.xlsx"),
 ])
 
 AUDIO_PATH = find_file([
+    os.path.join(current_dir, "data", "audio_krsti_full_tari.wav"),
     os.path.join(current_dir, "audio_krsti_full_tari.wav"),
+    os.path.join(current_dir, "ADITS_ROBOT_TARI_SIAP_PAKAI", "data", "audio_krsti_full_tari.wav"),
     os.path.join(current_dir, "ADITS_ROBOT_TARI_SIAP_PAKAI", "audio_krsti_full_tari.wav"),
+    os.path.join(parent_dir, "data", "audio_krsti_full_tari.wav"),
     os.path.join(parent_dir, "audio_krsti_full_tari.wav"),
 ])
 

@@ -46,8 +46,11 @@ class VoiceAIBridge:
     def _load_model(self):
         current_dir = os.path.dirname(os.path.abspath(__file__))
         cand_paths = [
+            os.path.join(current_dir, "..", "models", "model_command_classifier_5kelas.pkl"),
             os.path.join(current_dir, "..", "model_command_classifier_5kelas.pkl"),
+            os.path.join(current_dir, "models", "model_command_classifier_5kelas.pkl"),
             os.path.join(current_dir, "model_command_classifier_5kelas.pkl"),
+            os.path.join(current_dir, "..", "..", "ADITS_ROBOT_TARI_SIAP_PAKAI", "models", "model_command_classifier_5kelas.pkl"),
             os.path.join(current_dir, "..", "..", "ADITS_ROBOT_TARI_SIAP_PAKAI", "model_command_classifier_5kelas.pkl")
         ]
         for p in cand_paths:

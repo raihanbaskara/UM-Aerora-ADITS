@@ -26,7 +26,8 @@ class AudioPlayerService:
     def __init__(self, audio_filename: str = "audio_krsti_full_tari.wav"):
         self.audio_filename = audio_filename
         self.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        self.audio_path = os.path.join(self.base_dir, audio_filename)
+        p_data = os.path.join(self.base_dir, "data", audio_filename)
+        self.audio_path = p_data if os.path.exists(p_data) else os.path.join(self.base_dir, audio_filename)
         
         self.is_playing = False
         self.is_paused = False
