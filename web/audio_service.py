@@ -290,11 +290,9 @@ class AudioService:
 
         logger.info(f"Audio stream aktif: {self.selected_device_name} @ {native_sr} Hz ({channels} channels)")
 
-        err_count = 0
         while not self._stop_event.is_set():
             try:
                 data = stream.read(CHUNK_SIZE, exception_on_overflow=False)
-                err_count = 0
                 arr = np.frombuffer(data, dtype=np.int16).astype(np.float32) / 32768.0
 
                 # Downmix ke mono jika stereo (mencegah sample-interleave yang mendistorsi frekuensi)
@@ -337,11 +335,7 @@ class AudioService:
                             ).start()
 
             except Exception as e:
-                err_count += 1
-                if err_count > 10:
-                    logger.warning("Stream mikrofon USB terputus atau ALSA error berulang. Menghentikan stream secara aman.")
-                    break
-                time.sleep(0.05)
+                time.sleep(0.02)
 
         try:
             stream.stop_stream()
@@ -379,26 +373,17 @@ class AudioService:
                 logger.info(f"Suara terdeteksi terlalu singkat ({len(clean_speech)/TARGET_SR_AI:.2f}s), diabaikan.")
                 return
 
-            # Hitung estimasi durasi akumulasi buffer suara
-            buffer_ms = (len(audio_data) / max(1, orig_sr)) * 1000.0
-
             # 3. Ekstraksi 47 Fitur Akustik Riil
-            t_feat_start = time.perf_counter()
             feats = extract_47_features(clean_speech, sr=TARGET_SR_AI)
-            t_feat_end = time.perf_counter()
-            feat_ms = (t_feat_end - t_feat_start) * 1000.0
 
             vec = np.array([feats.get(c, 0.0) for c in voice_ai_bridge.features], dtype=np.float64).reshape(1, -1)
             vec = np.nan_to_num(vec, nan=0.0)
 
             # 4. Inferensi Model LightGBM
-            t_infer_start = time.perf_counter()
             probs = voice_ai_bridge.model.predict_proba(vec)[0]
             best_idx = int(np.argmax(probs))
             pred_cmd = voice_ai_bridge.decode_prediction(best_idx)
             raw_conf = float(probs[best_idx]) * 100.0
-            t_infer_end = time.perf_counter()
-            infer_ms = (t_infer_end - t_infer_start) * 1000.0
 
             sorted_p = np.sort(probs)[::-1]
             p1 = float(sorted_p[0]) * 100.0
@@ -412,22 +397,11 @@ class AudioService:
                 confidence = p1
 
             latency_ms = (time.perf_counter() - t0) * 1000.0
-            lat_info = {
-                "buffer_ms": round(buffer_ms, 1),
-                "feat_ms": round(feat_ms, 1),
-                "infer_ms": round(infer_ms, 1)
-            }
 
             # 5. Eksekusi Perintah jika lolos ambang validasi
             if confidence >= 55.0 and pred_cmd in ["MULAI", "STOP", "LANJUT", "BERDIRI", "DUDUK"]:
                 logger.info(f"Voice Detected Live: [{pred_cmd}] (Conf: {confidence:.1f}%, Margin: {margin_ratio:.2f}, Latency: {latency_ms:.1f} ms)")
-                voice_ai_bridge.trigger_command(
-                    pred_cmd,
-                    confidence=confidence,
-                    latency_ms=latency_ms,
-                    rms_val=rms_val,
-                    lat_info=lat_info
-                )
+                voice_ai_bridge.trigger_command(pred_cmd, confidence=confidence, latency_ms=latency_ms, rms_val=rms_val)
             else:
                 logger.info(f"Vokal tidak meyakinkan: [{pred_cmd}] (P1: {p1:.1f}%, Margin: {margin_ratio:.2f})")
 

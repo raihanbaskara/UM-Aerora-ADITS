@@ -44,7 +44,7 @@ def test_system_resources():
         print(f"CPU Core        : {cpu_count} Core (Beban saat ini: {cpu_usage:.1f}%)")
         print(f"Total RAM       : {mem.total / (1024**3):.2f} GB (Terpakai: {mem.percent:.1f}%)")
         if cpu_usage < 50.0:
-            print("  -> Status Beban CPU: [LOLOS] < 50%")
+            print("  -> Status Beban CPU: [LOLOS] < 50% sesuai target Bab 3.3 proposal!")
         else:
             print("  -> Status Beban CPU: Di atas 50% (pantau background processes)")
     else:

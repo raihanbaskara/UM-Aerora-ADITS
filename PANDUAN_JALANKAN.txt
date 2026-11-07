@@ -32,9 +32,13 @@ DAFTAR FILE DI DALAM PAKET:
 - eval_buffer_duration_sensitivity.py        : Skrip uji sensitivitas panjang buffer audio (1.3s - 0.6s)
 - hasil_sensitivitas_buffer_audio.xlsx       : Data hasil akurasi per durasi buffer (0.8s = 96%)
 
-[3. DEPLOYMENT EMBEDDED RASPBERRY PI 5]
+[3. DEPLOYMENT EMBEDDED RASPBERRY PI 4 & RASPBERRY PI 5]
+- setup_rpi4.sh                              : Skrip bash instalasi otomatis 1-klik di Raspberry Pi 4
+- test_rpi4_hardware.py                      : Skrip diagnostik CPU, thermal, ALSA mic, dan latensi Pi 4
+- test_dynamixel_xl320_scan.py               : Skrip scanner & uji kedip LED servo Dynamixel XL-320
+- PANDUAN_RASPBERRY_PI4.md                   : Panduan langkah lengkap eksekusi di Raspberry Pi 4
 - setup_rpi5.sh                              : Skrip bash instalasi otomatis 1-klik di Raspberry Pi 5
-- test_rpi5_hardware.py                      : Skrip diagnostik ALSA mic, CPU load, dan latensi ARM64
+- test_rpi5_hardware.py                      : Skrip diagnostik ALSA mic, CPU load, dan latensi Pi 5
 - PANDUAN_RASPBERRY_PI5.md                   : Panduan langkah lengkap eksekusi di Raspberry Pi 5
 
 [4. MODEL KECERDASAN BUATAN (.PKL) - FULL LIGHTGBM]
@@ -86,20 +90,43 @@ CARA MENJALANKAN SISTEM DI WINDOWS (LAPTOP / PENGEMBANG):
    python benchmark_scheduler_ttest.py
 
 --------------------------------------------------------------------------------
-CARA MENJALANKAN SISTEM DI RASPBERRY PI 4 / 5 (EDGE EMBEDDED ROBOT):
+CARA MENJALANKAN SISTEM DI RASPBERRY PI 4 (EDGE EMBEDDED ROBOT):
 --------------------------------------------------------------------------------
-1. Buka terminal di Raspberry Pi dan jalankan script setup:
+1. Salin folder ADITS_ROBOT_TARI_SIAP_PAKAI ke Raspberry Pi 4 (via Flashdisk / SCP).
+2. Buka terminal di Raspberry Pi 4 dan jalankan script setup:
    chmod +x setup_rpi4.sh
    ./setup_rpi4.sh
+
+3. Reboot Pi sekali agar izin USB Serial (U2D2) aktif:
+   sudo reboot
+
+4. Masuk ke folder & aktifkan virtual environment:
+   cd ~/ADITS_ROBOT_TARI_SIAP_PAKAI
+   source venv/bin/activate
+
+5. Jalankan pengujian hardware diagnostik:
+   python test_rpi4_hardware.py
+   python test_dynamixel_xl320_scan.py (Scan & tes kedip LED servo XL-320)
+
+6. Jalankan Kontroler Terpadu di Raspberry Pi 4:
+   python adits_unified_voice_dsp_internal.py
+   (Baca panduan lengkap di: PANDUAN_RASPBERRY_PI4.md)
+
+--------------------------------------------------------------------------------
+CARA MENJALANKAN SISTEM DI RASPBERRY PI 5 (EDGE EMBEDDED ROBOT):
+--------------------------------------------------------------------------------
+1. Buka terminal di Raspberry Pi 5 dan jalankan script setup:
+   chmod +x setup_rpi5.sh
+   ./setup_rpi5.sh
 
 2. Masuk ke virtual environment:
    source venv/bin/activate
 
 3. Jalankan pengujian hardware diagnostik:
-   python test_rpi4_hardware.py
+   python test_rpi5_hardware.py
 
-4. Jalankan Kontroler Terpadu di Raspberry Pi 4:
-   python adits_unified_voice_dsp_internal.py --demo   (Mode Demo Otomatis)
-   python adits_unified_voice_dsp_internal.py          (Mode Mikrofon / Keyboard)
+4. Jalankan Kontroler Terpadu di Raspberry Pi 5:
+   python adits_unified_voice_dsp_internal.py
+   (Baca panduan lengkap di: PANDUAN_RASPBERRY_PI5.md)
 
 ================================================================================

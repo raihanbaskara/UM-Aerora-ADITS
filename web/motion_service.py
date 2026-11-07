@@ -15,7 +15,6 @@ import glob
 import threading
 import logging
 from .servo_bridge import bridge
-from .audio_player_service import audio_player
 
 logger = logging.getLogger("MotionService")
 
@@ -146,12 +145,9 @@ class MotionService:
                 return False, f"Galat membaca CSV: {e}"
 
     def play(self):
-        """Mulai atau lanjutkan pemutaran koreografi tari & musik gamelan."""
+        """Mulai atau lanjutkan pemutaran koreografi tari."""
         if not self.rows_data:
-            # Jika belum ada file koreografi CSV dimuat, tetap izinkan pemutaran musik gamelan
-            self.status = "PLAYING"
-            audio_player.play()
-            return True, "Musik gamelan KRSTI dimulai (Mode Audio Standalone)"
+            return False, "Tidak ada data koreografi yang dimuat"
 
         if self.status == "PLAYING":
             return True, "Koreografi sudah berjalan"
@@ -159,26 +155,23 @@ class MotionService:
         if self.status == "PAUSED":
             self.status = "PLAYING"
             self._pause_event.set()
-            audio_player.resume()
-            return True, "Koreografi & musik gamelan dilanjutkan"
+            return True, "Koreografi dilanjutkan"
 
         # Memulai dari STOPPED
         self.status = "PLAYING"
         self._stop_event.clear()
         self._pause_event.set()
 
-        audio_player.play()
         self._thread = threading.Thread(target=self._run_playback, daemon=True)
         self._thread.start()
-        return True, "Pemutaran koreografi tari & musik gamelan dimulai"
+        return True, "Pemutaran koreografi tari dimulai"
 
     def pause(self):
-        """Menjeda sementara pemutaran koreografi & musik."""
+        """Menjeda sementara pemutaran."""
         if self.status == "PLAYING":
             self.status = "PAUSED"
             self._pause_event.clear()
-            audio_player.pause()
-            return True, "Koreografi & musik gamelan dijeda"
+            return True, "Koreografi dijeda"
         return False, "Koreografi tidak sedang berjalan"
 
     def stop(self):
@@ -187,12 +180,11 @@ class MotionService:
         self._pause_event.set()
         self.status = "STOPPED"
         self.current_row_idx = 0
-        audio_player.stop()
 
         # Kembalikan semua servo ke posisi aman berdiri tegak (150 derajat)
         neutral_angles = {s_id: 150.0 for s_id in range(1, 16)}
         bridge.set_multiple_angles(neutral_angles)
-        return True, "Koreografi & musik dihentikan. Robot kembali ke posisi netral (150°)."
+        return True, "Koreografi dihentikan. Robot kembali ke posisi netral (150°)."
 
     def step_next(self):
         """Maju satu langkah pose secara manual."""
@@ -277,8 +269,7 @@ class MotionService:
             "current_pose_name": current_pose_name,
             "loop_mode": self.loop_mode,
             "speed": self.speed_multiplier,
-            "available_files": self.list_motion_files(),
-            "audio": audio_player.get_status()
+            "available_files": self.list_motion_files()
         }
 
 motion_service = MotionService()

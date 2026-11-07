@@ -10,12 +10,11 @@ openpyxl>=3.0.0
 pygame>=2.5.0
 matplotlib>=3.6.0
 seaborn>=0.12.0
-# Windows Audio Input & Loopback:
-pyaudiowpatch>=0.2.12; sys_platform == 'win32'
-# Linux / Raspberry Pi Audio Input:
-pyaudio>=0.2.12; sys_platform != 'win32'
 psutil>=5.9.0
 dynamixel-sdk>=3.7.31
 fastapi>=0.100.0
 uvicorn>=0.20.0
-websockets>=12.0
+# Audio Input:
+# Windows Loopback: pyaudiowpatch>=0.2.12
+# Linux / Raspberry Pi: pyaudio>=0.2.12
+pyaudio>=0.2.12

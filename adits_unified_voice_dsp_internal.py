@@ -203,13 +203,11 @@ class MicCaptureThread(threading.Thread):
         self.running    = True
 
     def run(self):
-        err_count = 0
         while self.running:
             try:
                 data = self.stream.read(self.chunk_size, exception_on_overflow=False)
                 if not data:
                     continue
-                err_count = 0
                 arr = np.frombuffer(data, dtype=np.int16).astype(np.float32) / 32768.0
                 if self.channels > 1:
                     stereo = arr.reshape(-1, self.channels)
@@ -225,12 +223,9 @@ class MicCaptureThread(threading.Thread):
                         pass
                     self.queue.put(mono, block=False)
             except Exception:
-                err_count += 1
-                if not self.running or err_count > 10:
-                    if err_count > 10:
-                        print("\n[PERINGATAN ALSA] Mikrofon terputus atau stream rusak. Menghentikan thread mikrofon secara aman.")
+                if not self.running:
                     break
-                time.sleep(0.05)
+                time.sleep(0.002)
 
     def stop(self):
         self.running = False
@@ -256,21 +251,9 @@ def select_input_device(p):
         idx_choice += 1
 
     if not available:
-        print(" [PERINGATAN] Tidak ada mikrofon input fisik yang terdeteksi.")
-        print(" [MODE SIMULASI] Mengaktifkan Simulated Virtual Input & Kontrol Keyboard!")
-        return {
-            "index": -1,
-            "name": "Simulated Virtual Microphone (Demo / Keyboard Mode)",
-            "defaultSampleRate": SR_AI,
-            "maxInputChannels": 1
-        }
+        raise RuntimeError("Tidak ada perangkat mikrofon yang terdeteksi!")
 
     print("=" * 75)
-    if len(available) == 1 or "--demo" in sys.argv:
-        chosen = available[0][1]
-        print(f" Otomatis memilih mikrofon: [{available[0][0]}] {chosen.get('name', '')}\n")
-        return chosen
-
     while True:
         try:
             pilihan = input(f" Pilih nomor mikrofon [0-{len(available)-1}] (default 0): ").strip()
@@ -460,10 +443,10 @@ class ADITSGrandUnifiedController:
         hop = 256
         rms_frames = librosa.feature.rms(y=y, frame_length=1024, hop_length=hop)[0]
 
-        # Pastikan ada minimal 10 frame (~0.12 detik) suara vokal nyata di atas gate (bukan cuma klik/napas 0.02s!)
+        # Pastikan ada minimal 12 frame (~0.15 detik) suara vokal nyata di atas gate (bukan cuma klik/napas 0.02s!)
         active_frames = int(np.sum(rms_frames >= gate))
-        if active_frames < 10:
-            return ("BELOW_GATE", 0.0, {})
+        if active_frames < 12:
+            return ("BELOW_GATE", 0.0)
 
         win_frames = min(len(rms_frames), int(0.85 * SR_AI / hop))
         if len(rms_frames) > win_frames:
@@ -479,7 +462,7 @@ class ADITSGrandUnifiedController:
         # Cek energi rata-rata pulau vokal sebelum dinormalisasi
         rms_island = float(np.sqrt(np.mean(y_island ** 2)))
         if rms_island < (gate * 0.85):
-            return ("BELOW_GATE", 0.0, {})
+            return ("BELOW_GATE", 0.0)
 
         try:
             _, bounds = librosa.effects.trim(y_island, top_db=22)
@@ -640,7 +623,7 @@ class ADITSGrandUnifiedController:
         self.cmd_logs.append({
             "timestamp": ts,
             "command_id": cmd,
-            "priority": f"P{prio_level}",
+            "priority": f"P{prio}",
             "confidence": f"{conf:.1f}%",
             "state_after": self.state
         })
