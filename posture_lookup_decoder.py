@@ -3,7 +3,7 @@
 POSTURE LOOKUP & DECODER UNTUK ROBOT TARI (ADITS / KRSTI)
 ================================================================================
 Fungsi:
-Menerjemahkan output 1 Kolom dari Random Forest menjadi:
+Menerjemahkan output 1 Kolom dari model menjadi:
 1. Posisi Sudut Derajat Motor Servo Fisik (Kepala, Tangan Kanan, Tangan Kiri, Kaki).
 2. Aksi Penyelamatan Diri (Safe Stop) jika musik tiba-tiba berhenti di detik tersebut.
 ================================================================================
