@@ -1,37 +1,32 @@
+# ==============================================================================
+# .gitignore - ADITS (Audio-Driven IoT Task Scheduler) Humanoid Robot
+# Universitas Negeri Malang - Tim Peneliti Dewantara (KRSTI)
+# ==============================================================================
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
 
-# Distribution / packaging
-.Python
+# C extensions & build
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 
 # Virtual Environments
 venv/
 env/
 ENV/
-env.bak/
 venv.bak/
+
+# Temporary evaluation runs & session logs
+hasil_evaluasi_grand_unified_*.xlsx
+*.log
+
+# Binary caches & temporary data
+*.npy
+.cache/
 
 # IDE & Editor files
 .vscode/
@@ -42,5 +37,9 @@ venv.bak/
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
+# Office temporary lock files
+~$*.docx
+~$*.xlsx
+
+# Archive legacy backups
+legacy_archive/
